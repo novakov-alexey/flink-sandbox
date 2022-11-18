@@ -12,7 +12,6 @@ import io.findify.flinkadt.api._
 
 @main def ConnectedStreams =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
-  // env.getConfig.registerTypeWithKryoSerializer(classOf[Option])
 
   given tranTypeInfo: TypeInformation[Transaction] =
     TypeInformation.of(classOf[Transaction])
