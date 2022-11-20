@@ -17,15 +17,19 @@ val flinkVersion = "1.15.2"
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
+  "io.findify" %% "flink-scala-api" % "1.15-2",
+  "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
   "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion % Provided // It contains Factory class for Scala Products
+  "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
+  // "org.apache.flink" % "flink-streaming-java" % flinkVersion,
+  "org.apache.flink" % "flink-core" % flinkVersion,
+  "org.apache.flink" % "flink-walkthrough-common" % flinkVersion % Provided
 )
 
 lazy val root = (project in file(".")).settings(
   libraryDependencies ++= flinkDependencies ++ Seq(
-    "io.findify" %% "flink-scala-api" % "1.15-2" % Provided,
-    "org.apache.flink" % "flink-walkthrough-common" % flinkVersion % Provided,
-    "ch.qos.logback" % "logback-classic" % "1.3.0-alpha10" % Provided
+    "ch.qos.logback" % "logback-classic" % "1.3.0-alpha10" % Provided,
+    "io.bullet" %% "borer-core" % "1.10.0"
   )
 )
 
