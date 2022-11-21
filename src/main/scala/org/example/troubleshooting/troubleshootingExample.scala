@@ -65,9 +65,6 @@ case class WindowedMeasurements(
       eventsPerWindow = eventsPerWindow + 1
     )
 
-  def withWindow(window: TimeWindow) =
-    copy(windowStart = window.getStart, windowEnd = window.getEnd)
-
 object WindowedMeasurements:
   given wmTypeInformation: TypeInformation[WindowedMeasurements] =
     TypeInformation.of(classOf[WindowedMeasurements])
@@ -104,7 +101,6 @@ val RANDOM_SEED = 1
 val NUM_OF_MEASUREMENTS = 100_000
 
 def createSerializedMeasurements: Array[Array[Byte]] =
-
   val rand = Random(RANDOM_SEED)
   val locations =
     Using.resource(Source.fromResource("cities.csv"))(_.getLines().toArray)

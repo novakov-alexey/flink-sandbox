@@ -17,12 +17,10 @@ val flinkVersion = "1.15.2"
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  "io.findify" %% "flink-scala-api" % "1.15-2",
+  "io.findify" %% "flink-scala-api" % "1.15-2", // Allows to use Scala 2.13 or 3.x
   "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
   "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
-  // "org.apache.flink" % "flink-streaming-java" % flinkVersion,
-  "org.apache.flink" % "flink-core" % flinkVersion,
+  // "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
   "org.apache.flink" % "flink-walkthrough-common" % flinkVersion % Provided
 )
 

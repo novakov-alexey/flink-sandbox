@@ -4,7 +4,6 @@ import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunctio
 import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext
 import org.apache.flink.configuration.Configuration
 
-import scala.compiletime.ops.double
 import scala.util.Random
 import scala.util.Try
 import scala.util.Failure

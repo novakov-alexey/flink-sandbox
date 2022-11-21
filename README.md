@@ -11,3 +11,12 @@ flink run -c org.example.wordCount /path/to/your/project/my-app/target/scala-x.y
 
 You can also run your application from within IntelliJ:  select the classpath of the 'mainRunner' module in the run/debug configurations.
 Simply open 'Run -> Edit configurations...' and then select 'mainRunner' from the "Use classpath of module" dropbox. 
+
+
+# Ammonite 
+
+There is helper predef script for Ammonite-REPL:
+
+```bash
+amm --predef scripts/flink-amm.sc
+```
