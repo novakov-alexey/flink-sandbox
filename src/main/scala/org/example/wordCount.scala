@@ -5,6 +5,7 @@ import io.findify.flinkadt.api._
 
 @main def wordCount =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
+  
   val text = env.fromElements(
     "To be, or not to be,--that is the question:--",
     "Whether 'tis nobler in the mind to suffer",
@@ -12,9 +13,6 @@ import io.findify.flinkadt.api._
     "Or to take arms against a sea of troubles,"
   )
 
-  val counts =
-    text.flatMap(_.toLowerCase.split("\\W+")).map((_, 1)).keyBy(_._1).sum(1)
-
-  counts.print()
+  text.flatMap(_.toLowerCase.split("\\W+")).map((_, 1)).keyBy(_._1).sum(1).print()
 
   env.execute("wordCount")
