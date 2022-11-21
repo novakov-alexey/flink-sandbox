@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package org.example
+package org.example.fraud
 
-//import org.apache.flink.streaming.api.scala._
+
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
+
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.walkthrough.common.sink.AlertSink
@@ -29,8 +30,9 @@ import org.apache.flink.walkthrough.common.entity.Transaction
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
 
-import Givens.given
 import java.io.File
+
+import Givens.given
 
 object Givens:
   given tranTypeInfo: TypeInformation[Transaction] =

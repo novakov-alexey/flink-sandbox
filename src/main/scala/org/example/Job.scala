@@ -16,9 +16,9 @@ package org.example
   * under the License.
   */
 
-//import org.apache.flink.api.scala._
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
+
 import org.apache.flink.api.java.ExecutionEnvironment
 
 /** Skeleton for a Flink Job.
@@ -34,7 +34,6 @@ import org.apache.flink.api.java.ExecutionEnvironment
   * in the projects root directory. You will find the jar in
   * target/scala-2.12/flink-sandbox-assembly-0.1-SNAPSHOT.jar
   */
-object Job extends App {
+@main def job =
   val env = ExecutionEnvironment.getExecutionEnvironment
   env.fromElements(1, 2, 3, 4, 5, 6).filter(_ % 2 == 1).map(i => i * i).print
-}

@@ -6,7 +6,7 @@ import org.apache.flink.walkthrough.common.source.TransactionSource
 import org.apache.flink.util.Collector
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.state.ValueStateDescriptor
-//import org.apache.flink.streaming.api.scala._
+
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
 

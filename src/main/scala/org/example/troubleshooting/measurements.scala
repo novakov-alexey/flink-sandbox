@@ -30,10 +30,10 @@ class MeasurementWindowProcessFunction
   ): Unit =
     val aggregate = elements.iterator.next
     val window = context.window
-    aggregate.withWindow(window).copy(location = key)
+    val res = aggregate.withWindow(window).copy(location = key)
 
     eventTimeLag.update(System.currentTimeMillis - window.getEnd)
-    out.collect(aggregate)
+    out.collect(res)
 
 class MeasurementWindowAggregatingPerLocation
     extends AggregateFunction[

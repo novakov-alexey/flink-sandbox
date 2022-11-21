@@ -3,12 +3,14 @@ package org.example.troubleshooting
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext
 import org.apache.flink.configuration.Configuration
-import scala.util.Random
+
 import scala.compiletime.ops.double
-import java.util.Arrays
+import scala.util.Random
 import scala.util.Try
 import scala.util.Failure
 import scala.util.Success
+
+import java.util.Arrays
 
 case class FakeKafkaRecord(
     timestamp: Long,

@@ -1,11 +1,12 @@
-package org.example
+package org.example.fraud
 
-import org.apache.flink.api.common.functions.RichMapFunction
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
-import org.apache.flink.walkthrough.common.entity.Transaction
+
+import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.api.common.typeinfo.TypeInformation
+import org.apache.flink.walkthrough.common.entity.Transaction
 import org.apache.flink.configuration.Configuration
 
 class RunningAverage

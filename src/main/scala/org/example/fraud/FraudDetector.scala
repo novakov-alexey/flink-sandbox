@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.example
+package org.example.fraud
 
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction
 import org.apache.flink.util.Collector

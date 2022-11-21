@@ -2,6 +2,7 @@ package org.example.troubleshooting
 
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
+import io.findify.flink.api.function.ProcessWindowFunction
 
 import org.apache.commons.lang3.RandomStringUtils
 
@@ -22,19 +23,18 @@ import org.apache.flink.configuration.TaskManagerOptions.{
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.functions.sink.DiscardingSink
 import org.apache.flink.runtime.metrics.DescriptiveStatisticsHistogram
 import org.apache.flink.util.Collector
+import org.apache.flink.configuration.MemorySize
 
 import scala.util.{Success, Failure, Random, Using}
 import scala.io.Source
 
 import java.time.Duration
-import io.findify.flink.api.function.ProcessWindowFunction
 
 import Measurement.given
 import WindowedMeasurements.given
-import org.apache.flink.streaming.api.functions.sink.DiscardingSink
-import org.apache.flink.configuration.MemorySize
 
 case class Measurement(
     sensorId: Int,
@@ -89,7 +89,7 @@ class MeasurementDeserializer
     extends RichFlatMapFunction[FakeKafkaRecord, Measurement]:
 
   lazy val numInvalidRecords =
-    getRuntimeContext().getMetricGroup().counter("numInvalidRecords")
+    getRuntimeContext.getMetricGroup.counter("numInvalidRecords")
 
   override def flatMap(
       value: FakeKafkaRecord,
@@ -103,13 +103,11 @@ class MeasurementDeserializer
 val RANDOM_SEED = 1
 val NUM_OF_MEASUREMENTS = 100_000
 
-def readLocations =
-  Using.resource(Source.fromResource("cities.csv"))(_.getLines().toArray)
-
 def createSerializedMeasurements: Array[Array[Byte]] =
 
   val rand = Random(RANDOM_SEED)
-  val locations = readLocations
+  val locations =
+    Using.resource(Source.fromResource("cities.csv"))(_.getLines().toArray)
 
   (0 to NUM_OF_MEASUREMENTS).map { _ =>
     val m = Measurement(

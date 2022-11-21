@@ -18,7 +18,6 @@ package org.example
  * limitations under the License.
  */
 
-//import org.apache.flink.streaming.api.scala._
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
 
