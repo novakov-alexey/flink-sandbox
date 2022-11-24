@@ -125,7 +125,8 @@ def createSerializedMeasurements: Array[Array[Byte]] =
 
   val env =
     StreamExecutionEnvironment
-      .createLocalEnvironmentWithWebUI(flinkConfig)
+      // .createLocalEnvironmentWithWebUI(flinkConfig)
+      .getExecutionEnvironment
       .setBufferTimeout(10)
 
   env.getConfig.setAutoWatermarkInterval(100)

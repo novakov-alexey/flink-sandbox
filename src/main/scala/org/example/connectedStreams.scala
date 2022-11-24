@@ -17,16 +17,16 @@ import io.findify.flinkadt.api._
     TypeInformation.of(classOf[Transaction])
 
   val control = env
-    .addSource(new TransactionSource)
+    .addSource(TransactionSource())
     .keyBy(_.getAccountId)
 
   val streamOfWords = env
-    .addSource(new TransactionSource)
+    .addSource(TransactionSource())
     .keyBy(_.getAccountId)
 
   control
     .connect(streamOfWords)
-    .flatMap(new ControlFunction())
+    .flatMap(ControlFunction())
     .print()
 
   env.execute()
