@@ -10,4 +10,4 @@ target
 .git
 .bsp
 .run
-.ammonite
+.ammonite/*
