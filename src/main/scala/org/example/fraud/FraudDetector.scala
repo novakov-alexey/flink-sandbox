@@ -33,11 +33,12 @@ import org.example.Transaction
 import org.example.TransactionsSource
 import org.example.Alert
 
-object FraudDetector {
+import scala.concurrent.duration._
+
+object FraudDetector:
   val SmallAmount = 1.00
   val LargeAmount = 500.00
-  val OneMinute = 60 * 1000L
-}
+  val OneMinute = 1.minute.toMillis
 
 @SerialVersionUID(1L)
 class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:

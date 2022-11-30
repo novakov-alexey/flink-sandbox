@@ -3,7 +3,6 @@ package org.example
 import org.apache.flink.streaming.api.functions.source.FromIteratorFunction
 import org.apache.flink.streaming.api.functions.sink.SinkFunction
 import org.apache.flink.streaming.api.functions.sink.SinkFunction.Context
-//import org.apache.flink.walkthrough.common.entity.Alert
 
 import org.slf4j.LoggerFactory
 

@@ -7,3 +7,6 @@ create-image-secret:
 
 build-local-image:
 	nerdctl --namespace=k8s.io build -t local/flink:1.15.2-stream3-no-scala .
+
+start-ammonite:
+	amm --predef scripts/flink-amm.sc	

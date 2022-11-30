@@ -27,9 +27,12 @@ class FakeKafkaSource(
     serializedMeasurements: Array[Array[Byte]],
     poisonPillRate: Double
 ) extends RichParallelSourceFunction[FakeKafkaRecord]:
+
   lazy val indexOfThisSubtask = getRuntimeContext.getIndexOfThisSubtask
+
   lazy val numberOfParallelSubtasks =
     getRuntimeContext.getNumberOfParallelSubtasks
+
   lazy val assignedPartitions =
     (0 to FakeKafkaSource.NO_OF_PARTITIONS).filter(
       _ % numberOfParallelSubtasks == indexOfThisSubtask

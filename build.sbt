@@ -31,16 +31,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.3.0-alpha10" % Provided,
       "io.bullet" %% "borer-core" % "1.10.0"
     ),
-    assembly / mainClass := Some("org.example.Job"),
-    assembly / assemblyExcludedJars := {
-      val cp = (assembly / fullClasspath).value
-      cp
-        .filter { _.data.getName == "scala-collection-compat_2.12-2.8.1.jar" }
-        .filter { _.data.getName == "scala-collection-compat_3-2.7.0.jar" }
-        .filter { _.data.getName == "scala-compiler.jar" }
-        .filter { _.data.getName == "scala-library-2.13.8.jar" }
-        .filter { _.data.getName == "scala-library.jar" }
-    }
+    assembly / mainClass := Some("org.example.Job")
   )
 
 // make run command include the provided dependencies
