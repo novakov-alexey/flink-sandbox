@@ -21,9 +21,8 @@ val flinkDependencies = Seq(
       ExclusionRule(organization = "org.apache.flink")
     ),
   "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
+  "org.apache.flink" % "flink-clients" % flinkVersion % Provided
   // "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
-  "org.apache.flink" % "flink-walkthrough-common" % flinkVersion % Provided
 )
 
 lazy val root = (project in file("."))

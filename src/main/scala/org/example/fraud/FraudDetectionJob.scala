@@ -18,17 +18,20 @@
 
 package org.example.fraud
 
-
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
 
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.functions.AggregateFunction
-import org.apache.flink.walkthrough.common.sink.AlertSink
-import org.apache.flink.walkthrough.common.source.TransactionSource
-import org.apache.flink.walkthrough.common.entity.Transaction
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext
+import org.apache.flink.streaming.api.functions.source.FromIteratorFunction
+
+import org.example.Transaction
+import org.example.TransactionsSource
+import org.example.Alert
+import org.example.AlertSink
 
 import java.io.File
 
@@ -37,33 +40,36 @@ import Givens.given
 object Givens:
   given tranTypeInfo: TypeInformation[Transaction] =
     TypeInformation.of(classOf[Transaction])
+  given alertTypeInfo: TypeInformation[Alert] =
+    TypeInformation.of(classOf[Alert])
 
 @main def FraudDetectionJob =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
   val transactions = env
-    .addSource(new TransactionSource)
+    .addSource(TransactionsSource.iterator)
     .name("transactions")
 
-  transactions
-    .flatMap(t => if (t.getAmount < 1.0d) List(t, t) else List(t))
-    .keyBy(_.getAccountId)
-    .map(new RunningAverage)
-    .keyBy(_ => "all")
-    .reduce { (a, b) =>
-      val runningAvg = (a._2 + b._2) / 2
-      println(s"average ${Thread.currentThread.getName}: $runningAvg")
-      b._1 -> runningAvg
-    }
+  // transactions
+  //   .flatMap(t => if (t.getAmount < 1.0d) List(t, t) else List(t))
+  //   .keyBy(_.getAccountId)
+  //   .map(new RunningAverage)
+  //   .keyBy(_ => "all")
+  //   .reduce { (a, b) =>
+  //     val runningAvg = (a._2 + b._2) / 2
+  //     println(s"average ${Thread.currentThread.getName}: $runningAvg")
+  //     b._1 -> runningAvg
+  //   }
+  //   .name("fraud-detector")
+
+  val alerts = transactions
+    .keyBy(_.accountId)
+    .process(FraudDetector())
     .name("fraud-detector")
 
-  // val alerts = transactions
-  // .keyBy(_.getAccountId)
-  //   .process(new FraudDetector)
-  //   .name("fraud-detector")
-  // alerts
-  //   .addSink(new AlertSink)
-  //   .name("send-alerts")
+  alerts
+    .addSink(AlertSink())
+    .name("send-alerts")
 
   env.execute("Fraud Detection")
 
@@ -74,8 +80,8 @@ class MaxAggregate
   override def createAccumulator() = MaxTransaction(0d, 0L)
 
   override def add(value: Transaction, accumulator: MaxTransaction) =
-    if value.getAmount > accumulator._1 then
-      MaxTransaction(value.getAmount, value.getTimestamp)
+    if value.amount > accumulator._1 then
+      MaxTransaction(value.amount, value.timestamp)
     else accumulator
 
   override def getResult(accumulator: MaxTransaction) =
@@ -95,13 +101,13 @@ class MaxAggregate
   )
 
   val transactions = env
-    .addSource(new TransactionSource)
+    .addSource(TransactionsSource.iterator)
     .name("transactions")
 
   val windowedMax = transactions
-    .keyBy(_.getAccountId)
+    .keyBy(_.accountId)
     .window(TumblingProcessingTimeWindows.of(Time.seconds(5)))
-    .reduce((a, b) => if a.getAmount >= b.getAmount then a else b)
+    .reduce((a, b) => if a.accountId >= b.amount then a else b)
     // .aggregate(MaxAggregate())
     .name("windowed-max")
     .print()

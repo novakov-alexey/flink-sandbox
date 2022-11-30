@@ -1,11 +1,11 @@
 package org.example
 
 import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction
-import org.apache.flink.walkthrough.common.entity.Transaction
-import org.apache.flink.walkthrough.common.source.TransactionSource
 import org.apache.flink.util.Collector
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.state.ValueStateDescriptor
+
+import org.example.TransactionsSource
 
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
@@ -17,12 +17,12 @@ import io.findify.flinkadt.api._
     TypeInformation.of(classOf[Transaction])
 
   val control = env
-    .addSource(TransactionSource())
-    .keyBy(_.getAccountId)
+    .addSource(TransactionsSource.iterator)
+    .keyBy(_.accountId)
 
   val streamOfWords = env
-    .addSource(TransactionSource())
-    .keyBy(_.getAccountId)
+    .addSource(TransactionsSource.iterator)
+    .keyBy(_.accountId)
 
   control
     .connect(streamOfWords)
@@ -56,8 +56,7 @@ class ControlFunction
   private def sumUp(t: Transaction, out: Collector[Transaction]) =
     Option(state.value()) match
       case Some(v) =>
-        t.setAmount(t.getAmount + v) // mutation, bad!
-        out.collect(t)
+        out.collect(t.copy(amount = t.amount + v))
         state.clear()
       case None =>
-        state.update(t.getAmount)
+        state.update(t.amount)

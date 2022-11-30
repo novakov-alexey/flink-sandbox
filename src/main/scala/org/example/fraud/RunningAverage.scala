@@ -6,8 +6,9 @@ import io.findify.flinkadt.api._
 import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.api.common.typeinfo.TypeInformation
-import org.apache.flink.walkthrough.common.entity.Transaction
 import org.apache.flink.configuration.Configuration
+
+import org.example.Transaction
 
 class RunningAverage
     extends RichMapFunction[Transaction, (Transaction, Double)]:
@@ -37,7 +38,7 @@ class RunningAverage
       case _         => ()
 
     Option(runningAvg.value) match
-      case Some(avg) => runningAvg.update((avg + t.getAmount) / count.value)
+      case Some(avg) => runningAvg.update((avg + t.amount) / count.value)
       case _         => ()
 
     (t, runningAvg.value)
