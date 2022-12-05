@@ -10,6 +10,7 @@ version := "0.1-SNAPSHOT"
 organization := "org.example"
 
 ThisBuild / scalaVersion := "3.1.2"
+ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
 val flinkVersion = "1.15.2"
 val log4jVersion = "2.17.1"
@@ -21,7 +22,9 @@ val flinkDependencies = Seq(
       ExclusionRule(organization = "org.apache.flink")
     ),
   "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-clients" % flinkVersion % Provided
+  "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
+  "org.apache.flink" % "flink-test-utils" % flinkVersion % Test,
+  "org.scalatest" %% "scalatest" % "3.2.13" % Test
   // "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
 )
 

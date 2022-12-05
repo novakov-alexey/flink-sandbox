@@ -46,7 +46,7 @@ class FakeKafkaSource(
     println(s"Now reading from partitions: $assignedPartitions")
   override def run(ctx: SourceContext[FakeKafkaRecord]): Unit =
     if assignedPartitions.nonEmpty then
-      while (!cancelled) {
+      while !cancelled do {
         val nextPartition = assignedPartitions(
           rand.nextInt(assignedPartitions.length)
         )
@@ -78,12 +78,11 @@ class FakeKafkaSource(
       ctx.markAsTemporarilyIdle()
       val waitLock = Object()
 
-      while (!cancelled) {
+      while !cancelled do {
         Try(waitLock.synchronized(waitLock.wait())) match
           case Failure(e: InterruptedException) if cancelled =>
             Thread.currentThread().interrupt()
           case _ => ()
-
       }
 
   private def getTimestampForPartition(partition: Int) =

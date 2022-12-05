@@ -61,17 +61,17 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
   ): Unit =
     // Get the current state for the current key
     Option(flagState.value).foreach { _ =>
-      if (transaction.amount > FraudDetector.LargeAmount) {
+      if transaction.amount > FraudDetector.LargeAmount then
         // Output an alert downstream
         val alert = Alert(transaction.accountId)
         collector.collect(alert)
         logger.info(s"large amount: ${transaction.amount}")
-      }
+      
       // Clean up our state
       cleanUp(context)
     }
 
-    if (transaction.amount < FraudDetector.SmallAmount) {
+    if transaction.amount < FraudDetector.SmallAmount then
       // set the flag to true
       flagState.update(true)
 
@@ -81,7 +81,6 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       context.timerService.registerProcessingTimeTimer(timer)
       timerState.update(timer)
       logger.info(s"small amount: ${transaction.amount}")
-    }
 
   override def onTimer(
       timestamp: Long,
