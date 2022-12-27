@@ -12,6 +12,14 @@ flink run -c org.example.wordCount /path/to/your/project/my-app/target/scala-x.y
 You can also run your application from within IntelliJ:  select the classpath of the 'mainRunner' module in the run/debug configurations.
 Simply open 'Run -> Edit configurations...' and then select 'mainRunner' from the "Use classpath of module" dropbox. 
 
+# Scala 3 Support
+
+This project is using Ververica image for Flink 1.15 which depends on Scala 2.12. However, it does not have to have Scala 2.12 bundled if do not plan to use Scala 2.12 specifically.
+Below command builds Flink Image removing built-in Scala 2.12, which can be later used with "io.findify" %% "flink-scala-api" library which support Scala 2.13 and 3.x.
+
+```bash
+make build-scala-image
+```
 
 # Ammonite 
 
@@ -21,7 +29,7 @@ There is helper predef script for Ammonite-REPL:
 amm --predef scripts/flink-amm.sc
 ```
 
-then run in console:
+then use `table2` variable in Ammonite console:
 
 ```bash
 table2.execute.print
