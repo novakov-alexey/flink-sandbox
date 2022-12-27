@@ -43,24 +43,33 @@ object Givens:
   given alertTypeInfo: TypeInformation[Alert] =
     TypeInformation.of(classOf[Alert])
 
-@main def FraudDetectionJob =
+@main def runningAvg =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
   val transactions = env
     .addSource(TransactionsSource.iterator)
     .name("transactions")
 
-  // transactions
-  //   .flatMap(t => if (t.getAmount < 1.0d) List(t, t) else List(t))
-  //   .keyBy(_.getAccountId)
-  //   .map(new RunningAverage)
-  //   .keyBy(_ => "all")
-  //   .reduce { (a, b) =>
-  //     val runningAvg = (a._2 + b._2) / 2
-  //     println(s"average ${Thread.currentThread.getName}: $runningAvg")
-  //     b._1 -> runningAvg
-  //   }
-  //   .name("fraud-detector")
+  transactions
+    .flatMap(t => if t.amount < 1.0d then List(t, t) else List(t))
+    .keyBy(_.accountId)
+    .map(new RunningAverage)
+    .keyBy(_ => "all")
+    .reduce { (a, b) =>
+      val runningAvg = (a._2 + b._2) / 2
+      println(s"average ${Thread.currentThread.getName}: $runningAvg")
+      b._1 -> runningAvg
+    }
+    .name("fraud-detector")
+
+  env.execute("Fraud Detection")
+
+@main def FraudDetectionJob =
+  val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+  val transactions = env
+    .addSource(TransactionsSource.iterator)
+    .name("transactions")
 
   val alerts = transactions
     .keyBy(_.accountId)
@@ -107,7 +116,7 @@ class MaxAggregate
   val windowedMax = transactions
     .keyBy(_.accountId)
     .window(TumblingProcessingTimeWindows.of(Time.seconds(5)))
-    .reduce((a, b) => if a.accountId >= b.amount then a else b)
+    .reduce((a, b) => if a.amount < b.amount then b else a)
     // .aggregate(MaxAggregate())
     .name("windowed-max")
     .print()

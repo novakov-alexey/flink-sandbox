@@ -65,8 +65,8 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
         // Output an alert downstream
         val alert = Alert(transaction.accountId)
         collector.collect(alert)
-        logger.info(s"large amount: ${transaction.amount}")
-      
+        logger.info(s"Fraudulent transaction: $transaction")
+
       // Clean up our state
       cleanUp(context)
     }

@@ -6,7 +6,7 @@ ThisBuild / resolvers ++= Seq(
 )
 
 name := "flink-sandbox"
-version := "0.1-SNAPSHOT"
+version := "0.1"
 organization := "org.example"
 
 ThisBuild / scalaVersion := "3.1.2"
