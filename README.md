@@ -14,8 +14,8 @@ Simply open 'Run -> Edit configurations...' and then select 'mainRunner' from th
 
 # Scala 3 Support
 
-This project is using Ververica image for Flink 1.15 which depends on Scala 2.12. However, it does not have to have Scala 2.12 bundled if do not plan to use Scala 2.12 specifically.
-Below command builds Flink Image removing built-in Scala 2.12, which can be later used with "io.findify" %% "flink-scala-api" library which support Scala 2.13 and 3.x.
+This project is using Ververica container image for Apache Flink 1.15, which depends on Scala 2.12. However, it does not have to have Scala 2.12 bundled, especially if you do not need to use Scala 2.12 specifically.
+Below command builds Flink Image removing built-in Scala 2.12, which can be later used with [flink-scala-api](https://github.com/findify/flink-scala-api) library which support Scala 2.13 and 3.x.
 
 ```bash
 make build-scala-image
