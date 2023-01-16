@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.3.0-alpha10" % Provided,
       "io.bullet" %% "borer-core" % "1.10.0"
     ),
-    assembly / mainClass := Some("org.example.Job")
+    assembly / mainClass := Some("org.example.fraud.FraudDetectionJob")
   )
 
 // make run command include the provided dependencies
