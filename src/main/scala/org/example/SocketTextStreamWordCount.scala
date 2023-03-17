@@ -44,16 +44,14 @@ import io.findify.flinkadt.api._
   *   - write and use user-defined functions.
   */
 @main def SocketTextStreamWordCount(hostName: String, port: Int) =
-  val env = StreamExecutionEnvironment.getExecutionEnvironment
+  val flink = StreamExecutionEnvironment.getExecutionEnvironment
 
-  // Create streams for names and ages by mapping the inputs to the corresponding objects
-  val text = env.socketTextStream(hostName, port)
-  val counts = text
+  flink
+    .socketTextStream(hostName, port)
     .flatMap(_.toLowerCase.split("\\W+").filter(_.nonEmpty))
     .map((_, 1))
-    .keyBy(0)
+    .keyBy(_._1)
     .sum(1)
+    .print()
 
-  counts.print()
-
-  env.execute("Scala SocketTextStreamWordCount Example")
+  flink.execute("Scala SocketTextStreamWordCount Example")
