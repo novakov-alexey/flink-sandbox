@@ -46,11 +46,11 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
 
   @transient lazy val flagState =
     getRuntimeContext.getState(
-      new ValueStateDescriptor("flag", classOf[Boolean])
+      ValueStateDescriptor("flag", classOf[Boolean])
     )
 
   @transient lazy val timerState = getRuntimeContext.getState(
-    new ValueStateDescriptor("timer-state", classOf[Long])
+    ValueStateDescriptor("timer-state", classOf[Long])
   )
 
   @throws[Exception]
@@ -80,7 +80,7 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
         context.timerService.currentProcessingTime + FraudDetector.OneMinute
       context.timerService.registerProcessingTimeTimer(timer)
       timerState.update(timer)
-      logger.info(s"small amount: ${transaction.amount}")
+      logger.info(s"small amount: ${transaction.amount}")      
 
   override def onTimer(
       timestamp: Long,

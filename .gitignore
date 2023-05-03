@@ -11,3 +11,4 @@ target
 .bsp
 .run
 .ammonite/*
+.scala-build

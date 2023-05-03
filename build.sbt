@@ -24,8 +24,8 @@ val flinkDependencies = Seq(
   "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
   "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
   "org.apache.flink" % "flink-test-utils" % flinkVersion % Test,
-  "org.scalatest" %% "scalatest" % "3.2.13" % Test
-  // "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products
+  "org.scalatest" %% "scalatest" % "3.2.13" % Test,
+  // "org.apache.flink" % "flink-streaming-scala_2.12" % flinkVersion, // It contains Factory class for Scala Products  
 )
 
 lazy val root = (project in file("."))

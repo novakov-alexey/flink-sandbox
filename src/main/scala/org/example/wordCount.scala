@@ -3,9 +3,9 @@ package org.example
 import io.findify.flink.api._
 import io.findify.flinkadt.api._
 
-@main def wordCount =
+@main def wordCountExample =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
-  
+
   val text = env.fromElements(
     "To be, or not to be,--that is the question:--",
     "Whether 'tis nobler in the mind to suffer",
