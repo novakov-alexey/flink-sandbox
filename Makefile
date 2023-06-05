@@ -9,7 +9,7 @@ build-local-image:
 	nerdctl --namespace=k8s.io build -t local/flink:1.15.2-stream3-no-scala -f Dockerfile-Ververica .
 
 build-scala-image:
-	docker build -t flink:1.15.3-stream1-no-scala -f Dockerfile-Ververica .
+	docker build -t flink:1.16.1-stream2-no-scala -f Dockerfile-Ververica .
 
 build-apache-scala-image:
 	docker build -t flink:1.15.2-my-job-scala3 .

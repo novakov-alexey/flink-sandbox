@@ -18,8 +18,8 @@ package org.example
  * limitations under the License.
  */
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 
 /** This example shows an implementation of WordCount with data from a text
   * socket. To run the example make sure that the service providing the text

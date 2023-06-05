@@ -1,8 +1,10 @@
 package org.example.troubleshooting
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
-import io.findify.flink.api.function.ProcessWindowFunction
+import java.time.Duration
+
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
+import org.apache.flink.api.function.ProcessWindowFunction
 
 import org.apache.commons.lang3.RandomStringUtils
 
@@ -30,8 +32,6 @@ import org.apache.flink.configuration.MemorySize
 
 import scala.util.{Success, Failure, Random, Using}
 import scala.io.Source
-
-import java.time.Duration
 
 import Measurement.given
 import WindowedMeasurements.given
@@ -131,6 +131,7 @@ def createSerializedMeasurements: Array[Array[Byte]] =
 
   env.getConfig.setAutoWatermarkInterval(100)
   env.enableCheckpointing(5000)
+  env.getConfig.disableForceKryo()
   env.getCheckpointConfig.setMinPauseBetweenCheckpoints(4000)
 
   val FAILURE_RATE = 0.0001f

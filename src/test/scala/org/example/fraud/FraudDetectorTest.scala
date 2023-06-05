@@ -13,9 +13,9 @@ import org.apache.flink.streaming.api.TimerService
 import org.apache.flink.streaming.api.operators.StreamingRuntimeContext
 import org.apache.flink.api.common.functions.util.AbstractRuntimeUDFContext
 import org.apache.flink.streaming.api.operators.StreamFlatMap
+import org.apache.flink.configuration.Configuration
 
 import scala.collection.mutable.ListBuffer
-import java.lang
 
 class FraudDetectorTest extends AnyFlatSpec with Matchers:
 
@@ -44,6 +44,7 @@ class FraudDetectorTest extends AnyFlatSpec with Matchers:
     // given
     val detector = FraudDetector()
     detector.setRuntimeContext(FakeRuntimeContext())
+    detector.open(new Configuration())
 
     val ctx = makeContext(detector)
     val collector = FakeCollector()

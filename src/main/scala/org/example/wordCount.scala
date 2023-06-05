@@ -1,7 +1,7 @@
 package org.example
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 
 @main def wordCountExample =
   val env = StreamExecutionEnvironment.getExecutionEnvironment

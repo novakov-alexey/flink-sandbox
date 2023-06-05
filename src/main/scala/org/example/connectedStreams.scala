@@ -7,8 +7,8 @@ import org.apache.flink.api.common.state.ValueStateDescriptor
 
 import org.example.TransactionsSource
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 
 @main def ConnectedStreams =
   val env = StreamExecutionEnvironment.getExecutionEnvironment

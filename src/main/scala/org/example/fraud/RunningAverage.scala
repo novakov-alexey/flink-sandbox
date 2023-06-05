@@ -1,7 +1,7 @@
 package org.example.fraud
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 
 import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor

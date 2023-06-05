@@ -25,8 +25,8 @@ import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.configuration.Configuration
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 import org.slf4j.LoggerFactory
 
 import org.example.Transaction
@@ -34,6 +34,14 @@ import org.example.TransactionsSource
 import org.example.Alert
 
 import scala.concurrent.duration._
+
+case class FraudStateVars(
+    flagState: ValueState[Boolean],
+    timerState: ValueState[Long]
+):
+  def clear(): Unit =
+    flagState.clear
+    timerState.clear
 
 object FraudDetector:
   val SmallAmount = 1.00
@@ -44,14 +52,17 @@ object FraudDetector:
 class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
   @transient lazy val logger = LoggerFactory.getLogger(classOf[FraudDetector])
 
-  @transient lazy val flagState =
-    getRuntimeContext.getState(
-      ValueStateDescriptor("flag", classOf[Boolean])
-    )
+  @transient var fraudState: FraudStateVars = _
 
-  @transient lazy val timerState = getRuntimeContext.getState(
-    ValueStateDescriptor("timer-state", classOf[Long])
-  )
+  override def open(parameters: Configuration): Unit =
+    fraudState = FraudStateVars(
+      getRuntimeContext.getState(
+        ValueStateDescriptor("flag", classOf[Boolean])
+      ),
+      getRuntimeContext.getState(
+        ValueStateDescriptor("timer-state", classOf[Long])
+      )
+    )
 
   @throws[Exception]
   def processElement(
@@ -60,7 +71,7 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       collector: Collector[Alert]
   ): Unit =
     // Get the current state for the current key
-    Option(flagState.value).foreach { _ =>
+    Option(fraudState.flagState.value).foreach { _ =>
       if transaction.amount > FraudDetector.LargeAmount then
         // Output an alert downstream
         val alert = Alert(transaction.accountId)
@@ -73,14 +84,14 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
 
     if transaction.amount < FraudDetector.SmallAmount then
       // set the flag to true
-      flagState.update(true)
+      fraudState.flagState.update(true)
 
       // set the timer and timer state
       val timer =
         context.timerService.currentProcessingTime + FraudDetector.OneMinute
       context.timerService.registerProcessingTimeTimer(timer)
-      timerState.update(timer)
-      logger.info(s"small amount: ${transaction.amount}")      
+      fraudState.timerState.update(timer)
+      logger.info(s"small amount: ${transaction.amount}")
 
   override def onTimer(
       timestamp: Long,
@@ -88,17 +99,15 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       out: Collector[Alert]
   ): Unit =
     // remove flag after 1 minute, assuming that attacker makes fraudulent transactions within a minute
-    timerState.clear
-    flagState.clear
+    fraudState.clear()
 
   @throws[Exception]
   private def cleanUp(
       ctx: KeyedProcessFunction[Long, Transaction, Alert]#Context
   ): Unit =
     // delete timer
-    val timer = timerState.value
+    val timer = fraudState.timerState.value
     ctx.timerService.deleteProcessingTimeTimer(timer)
 
     // clean up all states
-    timerState.clear
-    flagState.clear
+    fraudState.clear()

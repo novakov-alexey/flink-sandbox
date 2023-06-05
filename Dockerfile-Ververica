@@ -1,4 +1,4 @@
-FROM registry.ververica.com/v2.9/flink:1.15.3-stream1-scala_2.12-java11
+FROM registry.ververica.com/v2.10/flink:1.16.1-stream2-scala_2.12-java11
 # RUN rm /flink/lib/flink-cep-scala_2.12-1.15.3-stream1.jar
 # RUN rm /flink/opt/flink-cep-scala_2.12-1.15.3-stream1.jar
-RUN rm /flink/lib/flink-scala_2.12-1.15.3-stream1.jar
+RUN rm /flink/lib/flink-scala_2.12-1.16.1-stream2.jar

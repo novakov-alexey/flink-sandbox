@@ -18,8 +18,10 @@
 
 package org.example.fraud
 
-import io.findify.flink.api._
-import io.findify.flinkadt.api._
+import java.io.File
+
+import org.apache.flink.api._
+import org.apache.flink.api.serializers._
 
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -32,8 +34,6 @@ import org.example.Transaction
 import org.example.TransactionsSource
 import org.example.Alert
 import org.example.AlertSink
-
-import java.io.File
 
 import Givens.given
 
@@ -66,10 +66,11 @@ object Givens:
 
 @main def FraudDetectionJob =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
-
+  
   val transactions = env
     .addSource(TransactionsSource.iterator)
     .name("transactions")
+    .union()
 
   val alerts = transactions
     .keyBy(_.accountId)

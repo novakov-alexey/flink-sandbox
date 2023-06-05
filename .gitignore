@@ -12,3 +12,4 @@ target
 .run
 .ammonite/*
 .scala-build
+metals.sbt
