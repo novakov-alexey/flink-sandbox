@@ -20,6 +20,9 @@ package org.example
 
 import org.apache.flink.api._
 import org.apache.flink.api.serializers._
+import org.apache.flink.configuration.Configuration
+import org.apache.flink.configuration.ConfigConstants
+import org.apache.flink.configuration.RestOptions.BIND_PORT
 
 /** This example shows an implementation of WordCount with data from a text
   * socket. To run the example make sure that the service providing the text
@@ -44,7 +47,10 @@ import org.apache.flink.api.serializers._
   *   - write and use user-defined functions.
   */
 @main def SocketTextStreamWordCount(hostName: String, port: Int) =
-  val flink = StreamExecutionEnvironment.getExecutionEnvironment
+  val config = new Configuration()
+  config.setBoolean(ConfigConstants.LOCAL_START_WEBSERVER, true);
+  config.set(BIND_PORT, "8080")
+  val flink = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(config)
 
   flink
     .socketTextStream(hostName, port)

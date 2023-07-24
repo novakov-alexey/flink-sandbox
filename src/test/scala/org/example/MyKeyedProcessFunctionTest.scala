@@ -12,7 +12,8 @@ import org.apache.flink.util.Collector
 
 @SerialVersionUID(1L)
 class MyKeyedProcessFunction
-    extends KeyedProcessFunction[Long, TestEvent, Long] {
+    extends KeyedProcessFunction[Long, TestEvent, Long]:
+
   @throws[Exception]
   override def processElement(
       e: TestEvent,
@@ -20,7 +21,6 @@ class MyKeyedProcessFunction
       out: Collector[Long]
   ): Unit =
     out.collect(e.timestamp)
-}
 
 class MyKeyedProcessFunctionTest extends AnyFlatSpec with Matchers:
 

@@ -31,7 +31,8 @@ final case class TestEvent(
     key: Long,
     timestamp: Long,
     runningCount: Long,
-    windowStart: Long = -1 // no window assigned yet
+    windowStart: Long = -1, // no window assigned yet,
+    bag: List[Int] = Nil
 )
 
 class CustomEventTimeTrigger[T, W <: TimeWindow](trigger: EventTimeTrigger)

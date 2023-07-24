@@ -23,7 +23,7 @@ import org.apache.flink.api.serializers._
   val streamOfWords = env
     .addSource(TransactionsSource.iterator)
     .keyBy(_.accountId)
-
+  
   control
     .connect(streamOfWords)
     .flatMap(ControlFunction())

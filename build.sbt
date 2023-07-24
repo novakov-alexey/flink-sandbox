@@ -10,14 +10,14 @@ name := "flink-sandbox"
 version := "0.1"
 organization := "org.example"
 
-ThisBuild / scalaVersion := "3.2.2"
+ThisBuild / scalaVersion := "3.3.0"
 ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
-val flinkVersion = "1.16.1"
+val flinkVersion = "1.16.2"
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  ("org.flinkextended" %% "flink-scala-api" % s"$flinkVersion.3")
+  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.0.0")
     .excludeAll(
       ExclusionRule(organization = "org.apache.flink")
     ),
@@ -35,6 +35,18 @@ lazy val root = (project in file("."))
       "io.bullet" %% "borer-core" % "1.10.0"
     ),
     assembly / mainClass := Some("org.example.fraud.FraudDetectionJob"),
+    assembly / assemblyExcludedJars := {
+      val cp = (assembly / fullClasspath).value
+      cp filter { f =>
+        Set(
+          "scala-asm-9.3.0-scala-1.jar",
+          "interface-1.0.4.jar",
+          "scala-compiler-2.13.6.jar"
+        ).contains(
+          f.data.getName
+        )
+      }
+    },
     Test / fork := true
   )
 

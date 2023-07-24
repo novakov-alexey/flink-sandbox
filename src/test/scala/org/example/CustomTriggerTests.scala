@@ -83,7 +83,7 @@ class CustomTriggerTest extends AnyFlatSpec with Matchers with Inspectors:
     testHarness.getRecordOutput.size should be(0)
 
     testHarness.processElement(
-      StreamRecord(TestEvent(2L, 6000, 1), 6000)
+      StreamRecord(TestEvent(2L, 6000, 1, windowStart = -1, bag = List(3)), 6000)
     )
     testHarness.processElement(
       StreamRecord(TestEvent(2L, 5000, 0), 5000)
@@ -99,12 +99,12 @@ class CustomTriggerTest extends AnyFlatSpec with Matchers with Inspectors:
     records.size should be(12)
     val windows = records.groupBy(_.getValue.windowStart)
 
-    // checking 0 .. 10000 window, which contains 2 as running count
+    // checking [0 - 10000] window, which contains 2 as running count
     windows(0)
       .map(_.getValue.runningCount)
       .max should be(2)
 
-    // checking windows 2000 .. 12000, 4000 ... etc., which contains 3 as running count
+    // checking windows [2000 - 12000], [4000 - ..] etc., which contains 3 as running count
     windows
       .filterKeys(_ > 0)
       .mapValues(_.map(_.getValue.runningCount).max)

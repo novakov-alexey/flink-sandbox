@@ -29,6 +29,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext
 import org.apache.flink.streaming.api.functions.source.FromIteratorFunction
+import org.apache.flink.configuration.Configuration
 
 import org.example.Transaction
 import org.example.TransactionsSource
@@ -65,8 +66,18 @@ object Givens:
   env.execute("Fraud Detection")
 
 @main def FraudDetectionJob =
-  val env = StreamExecutionEnvironment.getExecutionEnvironment
-  
+  val conf = Configuration()
+  conf.setString("state.savepoints.dir", "file:///tmp/savepoints")
+  conf.setString(
+    "execution.checkpointing.externalized-checkpoint-retention",
+    "RETAIN_ON_CANCELLATION"
+  )
+  conf.setString("execution.checkpointing.interval", "10s")
+  conf.setString("execution.checkpointing.min-pause", "10s")
+  conf.setString("state.backend", "filesystem")
+
+  val env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf)
+
   val transactions = env
     .addSource(TransactionsSource.iterator)
     .name("transactions")
