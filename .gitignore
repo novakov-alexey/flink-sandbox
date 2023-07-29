@@ -13,3 +13,4 @@ target
 .ammonite/*
 .scala-build
 metals.sbt
+*.jar
