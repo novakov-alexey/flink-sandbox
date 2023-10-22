@@ -18,35 +18,60 @@
 
 package org.example.fraud
 
-import org.apache.flink.streaming.api.functions.KeyedProcessFunction
-import org.apache.flink.util.Collector
-import org.apache.flink.api.common.state.ValueState
-import org.apache.flink.api.common.functions.RichMapFunction
-import org.apache.flink.api.common.state.ValueStateDescriptor
+import org.apache.flink.api.*
+import org.apache.flink.api.serializers.*
+
+import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
+import org.apache.flink.api.common.functions.RuntimeContext
 import org.apache.flink.configuration.Configuration
+import org.apache.flink.streaming.api.functions.KeyedProcessFunction
+import org.apache.flink.state.api.functions.KeyedStateReaderFunction
+import org.apache.flink.state.api.functions.KeyedStateReaderFunction.Context
+import org.apache.flink.util.Collector
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.example.{Alert, Transaction}
+
 import org.slf4j.LoggerFactory
+import scala.concurrent.duration.*
 
-import org.example.Transaction
-import org.example.TransactionsSource
-import org.example.Alert
-
-import scala.concurrent.duration._
+import FraudDetector.*
 
 case class FraudStateVars(
     flagState: ValueState[Boolean],
     timerState: ValueState[Long]
 ):
   def clear(): Unit =
-    flagState.clear
-    timerState.clear
+    flagState.clear()
+    timerState.clear()
 
 object FraudDetector:
   val SmallAmount = 1.00
   val LargeAmount = 500.00
-  val OneMinute = 1.minute.toMillis
+  val OneMinute: Long = 1.minute.toMillis
+
+  def readState(context: RuntimeContext): FraudStateVars =
+    FraudStateVars(
+      context.getState(
+        ValueStateDescriptor("flag", classOf[Boolean])
+      ),
+      context.getState(
+        ValueStateDescriptor("timer-state", classOf[Long])
+      )
+    )
+
+case class KeyedFraudState(key: Long, state: FraudStateVars)
+
+class ReaderFunction extends KeyedStateReaderFunction[Long, KeyedFraudState]:
+  var fraudState: FraudStateVars = _
+
+  override def open(parameters: Configuration): Unit =
+    fraudState = readState(getRuntimeContext)
+
+  override def readKey(
+    key: Long,
+    ctx: Context,
+    out: Collector[KeyedFraudState]): Unit =
+    out.collect(KeyedFraudState(key, fraudState))  
 
 @SerialVersionUID(1L)
 class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
@@ -55,14 +80,7 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
   @transient var fraudState: FraudStateVars = _
 
   override def open(parameters: Configuration): Unit =
-    fraudState = FraudStateVars(
-      getRuntimeContext.getState(
-        ValueStateDescriptor("flag", classOf[Boolean])
-      ),
-      getRuntimeContext.getState(
-        ValueStateDescriptor("timer-state", classOf[Long])
-      )
-    )
+    fraudState = readState(getRuntimeContext)
 
   @throws[Exception]
   def processElement(

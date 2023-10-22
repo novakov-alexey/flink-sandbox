@@ -37,7 +37,7 @@ class FakeKafkaSource(
     (0 to FakeKafkaSource.NO_OF_PARTITIONS).filter(
       _ % numberOfParallelSubtasks == indexOfThisSubtask
     )
-
+  
   val rand = Random(seed)
 
   @transient @volatile var cancelled = false

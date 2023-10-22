@@ -72,7 +72,7 @@ object TransactionsSource:
       Transaction(5, 0L, 292.44)
     )
 
-  val iterator =
+  val iterator: FromIteratorFunction[Transaction] =
     FromIteratorFunction[Transaction](
       (new Iterator[Transaction] with Serializable:
         var rows = data.iterator

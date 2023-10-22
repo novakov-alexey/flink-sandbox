@@ -14,3 +14,4 @@ target
 .scala-build
 metals.sbt
 *.jar
+sink-table
