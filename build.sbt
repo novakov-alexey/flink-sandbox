@@ -17,7 +17,7 @@ val flinkVersion = "1.15.4"
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.0.0")
+  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.0")
     .excludeAll(
       ExclusionRule(organization = "org.apache.flink")
     ),

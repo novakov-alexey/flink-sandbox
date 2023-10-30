@@ -2,9 +2,9 @@ package org.example.troubleshooting
 
 import java.time.Duration
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
-import org.apache.flink.api.function.ProcessWindowFunction
+import org.apache.flinkx.api._
+import org.apache.flinkx.api.serializers._
+import org.apache.flinkx.api.function.ProcessWindowFunction
 
 import org.apache.commons.lang3.RandomStringUtils
 

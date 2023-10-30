@@ -4,7 +4,7 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.runtime.metrics.DescriptiveStatisticsHistogram
 import org.apache.flink.util.Collector
 import org.apache.flink.configuration.Configuration
-import org.apache.flink.api.function.ProcessWindowFunction
+import org.apache.flinkx.api.function.ProcessWindowFunction
 import org.apache.flink.api.common.functions.AggregateFunction
 
 class MeasurementWindowProcessFunction

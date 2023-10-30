@@ -1,7 +1,7 @@
 package org.example
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.apache.flinkx.api._
+import org.apache.flinkx.api.serializers._
 
 import org.apache.flink.streaming.api.windowing.triggers.Trigger
 import org.apache.flink.streaming.api.windowing.triggers.Trigger.TriggerContext

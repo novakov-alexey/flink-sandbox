@@ -19,8 +19,8 @@
 package org.example.fraud
 
 import java.io.File
-import org.apache.flink.api.*
-import org.apache.flink.api.serializers.*
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows

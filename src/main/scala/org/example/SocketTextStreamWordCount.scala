@@ -18,8 +18,8 @@ package org.example
  * limitations under the License.
  */
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.apache.flinkx.api._
+import org.apache.flinkx.api.serializers._
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.configuration.ConfigConstants
 import org.apache.flink.configuration.RestOptions.BIND_PORT

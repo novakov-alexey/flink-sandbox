@@ -18,8 +18,8 @@
 
 package org.example.fraud
 
-import org.apache.flink.api.*
-import org.apache.flink.api.serializers.*
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 
 import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
 import org.apache.flink.api.common.functions.RuntimeContext
