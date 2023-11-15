@@ -15,3 +15,4 @@ target
 metals.sbt
 *.jar
 sink-table
+input-table
