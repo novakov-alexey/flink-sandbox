@@ -13,11 +13,14 @@ organization := "org.example"
 ThisBuild / scalaVersion := "3.3.0"
 ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
-val flinkVersion = "1.17.1"
+val flinkVersion = "1.18.0"
+val flinkMajorAndMinorVersion =
+  flinkVersion.split("\\.").toList.take(2).mkString(".")
+
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.0")
+  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.1")
     .excludeAll(
       ExclusionRule(organization = "org.apache.flink"),
       ExclusionRule(organization = "org.scalameta"),
@@ -27,7 +30,7 @@ val flinkDependencies = Seq(
   "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
   "org.apache.flink" % "flink-state-processor-api" % flinkVersion,
   "org.apache.flink" % "flink-csv" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-connector-kafka" % flinkVersion % Provided,
+  "org.apache.flink" % "flink-connector-kafka" % s"3.0.2-${flinkMajorAndMinorVersion}" % Provided,
   "org.apache.flink" % "flink-connector-files" % flinkVersion % Provided,
   "org.apache.flink" % "flink-test-utils" % flinkVersion % Test,
   "org.apache.flink" % "flink-streaming-java" % flinkVersion % Test classifier ("tests"),
@@ -60,7 +63,7 @@ lazy val root = (project in file("."))
         )
       }
     },
-    Test / fork := true
+    Test / fork := false
   )
 
 // make run command include the provided dependencies
