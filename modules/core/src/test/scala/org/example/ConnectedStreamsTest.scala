@@ -3,14 +3,15 @@ package org.example
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import org.apache.flink.api.*
-import org.apache.flink.api.serializers.*
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
-import _root_.java.util.concurrent.TimeUnit
-import _root_.java.time.Duration
 import org.apache.flink.streaming.api.functions.co.CoMapFunction
 import org.apache.flink.streaming.api.functions.co.CoProcessFunction
 import org.apache.flink.util.Collector
+
+import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 case class TestCommand(timestamp: Long, bag: List[String] = Nil)
 

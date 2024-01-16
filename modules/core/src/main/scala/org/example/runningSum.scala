@@ -1,7 +1,7 @@
 package org.example
 
-import org.apache.flinkx.api._
-import org.apache.flinkx.api.serializers._
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 
 import org.apache.flink.streaming.api.windowing.triggers.Trigger
 import org.apache.flink.streaming.api.windowing.triggers.Trigger.TriggerContext
@@ -22,10 +22,10 @@ import org.apache.flink.api.common.state.ValueState
 import org.apache.flink.api.common.state.MapStateDescriptor
 import org.apache.flink.api.common.state.MapState
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.*
 
-import _root_.java.util.concurrent.TimeUnit
-import _root_.java.time.Duration
+import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 final case class TestEvent(
     key: Long,

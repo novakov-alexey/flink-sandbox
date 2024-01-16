@@ -5,8 +5,6 @@ import org.apache.flink.util.Collector
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.state.ValueStateDescriptor
 
-import org.example.TransactionsSource
-
 import org.apache.flinkx.api._
 import org.apache.flinkx.api.serializers._
 

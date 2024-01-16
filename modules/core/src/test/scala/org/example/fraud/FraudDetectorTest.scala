@@ -2,7 +2,6 @@ package org.example.fraud
 
 import org.example.Transaction
 import org.example.Alert
-import org.example.fraud.FakeRuntimeContext
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
@@ -16,6 +15,7 @@ import org.apache.flink.streaming.api.operators.StreamFlatMap
 import org.apache.flink.configuration.Configuration
 
 import scala.collection.mutable.ListBuffer
+import org.example.FraudDetector
 
 class FraudDetectorTest extends AnyFlatSpec with Matchers:
 

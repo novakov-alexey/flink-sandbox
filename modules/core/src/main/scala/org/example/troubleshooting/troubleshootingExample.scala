@@ -1,4 +1,4 @@
-package org.example.troubleshooting
+package org.example
 
 import java.time.Duration
 

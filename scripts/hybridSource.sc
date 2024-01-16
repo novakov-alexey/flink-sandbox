@@ -4,8 +4,8 @@
 //> using dep "org.apache.flink:flink-connector-files:1.17.1"
 //> using dep "org.apache.flink:flink-connector-kafka:1.17.1"
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 import org.apache.flink.connector.file.src.FileSource
 import org.apache.flink.connector.file.src.reader.TextLineInputFormat
 import org.apache.flink.connector.file.src.impl.StreamFormatAdapter
@@ -16,7 +16,7 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.core.fs.Path
 
-val currentDirectory = _root_.java.io.File(".").getCanonicalPath
+val currentDirectory = java.io.File(".").getCanonicalPath
 
 val fileSource = FileSource
   .forBulkFileFormat(

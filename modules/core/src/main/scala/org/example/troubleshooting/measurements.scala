@@ -1,4 +1,4 @@
-package org.example.troubleshooting
+package org.example
 
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.runtime.metrics.DescriptiveStatisticsHistogram

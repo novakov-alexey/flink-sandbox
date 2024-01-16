@@ -1,4 +1,4 @@
-package org.example.troubleshooting
+package org.example
 
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction
 import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext

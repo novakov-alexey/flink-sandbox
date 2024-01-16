@@ -1,4 +1,4 @@
-package org.example.fraud
+package org.example
 
 import org.apache.flinkx.api._
 import org.apache.flinkx.api.serializers._
@@ -7,8 +7,6 @@ import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.configuration.Configuration
-
-import org.example.Transaction
 
 class RunningAverage
     extends RichMapFunction[Transaction, (Transaction, Double)]:

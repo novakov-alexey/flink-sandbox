@@ -16,7 +16,7 @@ class JobFailed(cause: Exception) extends Exception(cause)
     throw new RuntimeException("boom")
     try env.execute()
     catch case e: Exception => throw JobFailed(e)
-  } catch {
+  } catch
     case e: JobFailed =>
       throw e.getCause()
     case e: Throwable =>
@@ -27,4 +27,3 @@ class JobFailed(cause: Exception) extends Exception(cause)
         .fromElements("printing stacktrace")
         .print()
       env.execute()
-  }

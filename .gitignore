@@ -16,3 +16,4 @@ metals.sbt
 *.jar
 sink-table
 input-table
+jars
