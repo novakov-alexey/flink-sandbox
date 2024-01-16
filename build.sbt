@@ -13,14 +13,14 @@ organization := "org.example"
 ThisBuild / scalaVersion := "3.3.1"
 ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
-val flinkVersion = "1.17.1"
+val flinkVersion = "1.17.2"
 val flinkMajorAndMinorVersion =
   flinkVersion.split("\\.").toList.take(2).mkString(".")
 
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.1")
+  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.2")
     .excludeAll(
       ExclusionRule(organization = "org.apache.flink"),
       ExclusionRule(organization = "org.scalameta"),
