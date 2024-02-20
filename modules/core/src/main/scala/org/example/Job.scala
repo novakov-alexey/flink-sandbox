@@ -18,7 +18,7 @@ class JobFailed(cause: Exception) extends Exception(cause)
     catch case e: Exception => throw JobFailed(e)
   } catch
     case e: JobFailed =>
-      throw e.getCause()
+      throw e.getCause
     case e: Throwable =>
       e.printStackTrace()
       // failure in main method, not in the Flink job

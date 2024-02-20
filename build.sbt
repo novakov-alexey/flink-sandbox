@@ -13,7 +13,7 @@ organization := "org.example"
 ThisBuild / scalaVersion := "3.3.1"
 ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
-val flinkVersion = "1.17.2"
+val flinkVersion = "1.18.0"
 val flinkMajorAndMinorVersion =
   flinkVersion.split("\\.").toList.take(2).mkString(".")
 
@@ -28,18 +28,18 @@ val flinkDependencies = Seq(
     ),
   "org.apache.flink" % "flink-runtime-web" % flinkVersion % Provided,
   "org.apache.flink" % "flink-clients" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-state-processor-api" % flinkVersion % Provided,
+  "org.apache.flink" % "flink-state-processor-api" % flinkVersion,
   "org.apache.flink" % "flink-csv" % flinkVersion % Provided,
-  "org.apache.flink" % "flink-connector-kafka" % s"3.0.2-${flinkMajorAndMinorVersion}" % Provided,
+  "org.apache.flink" % "flink-connector-kafka" % s"3.0.2-$flinkMajorAndMinorVersion" % Provided,
   "org.apache.flink" % "flink-connector-files" % flinkVersion % Provided,
   "org.apache.flink" % "flink-table-runtime" % flinkVersion % Provided,
   "org.apache.flink" % "flink-table-planner-loader" % flinkVersion % Provided,
   "org.apache.flink" % "flink-test-utils" % flinkVersion % Test,
-  "org.apache.flink" % "flink-streaming-java" % flinkVersion % Test classifier ("tests"),
-  "org.scalatest" %% "scalatest" % "3.2.13" % Test
+  "org.apache.flink" % "flink-streaming-java" % flinkVersion % Test classifier "tests",
+  "org.scalatest" %% "scalatest" % "3.2.15" % Test
 )
 
-lazy val commontSettings = Seq(
+lazy val commonSettings = Seq(
   Compile / run := Defaults
     .runTask(
       Compile / fullClasspath,
@@ -76,8 +76,8 @@ def excludeJars(cp: Classpath) =
 lazy val `core` = (project in file("modules/core"))
   .settings(
     libraryDependencies ++= flinkDependencies ++ Seq(
-      "ch.qos.logback" % "logback-classic" % "1.3.0-alpha10" % Provided,
-      "io.bullet" %% "borer-core" % "1.10.0" % Provided
+      "ch.qos.logback" % "logback-classic" % "1.4.7" % Provided,
+      "io.bullet" %% "borer-core" % "1.10.2" % Provided
     ),
     assemblyPackageScala / assembleArtifact := false,
     assembly / assemblyExcludedJars := {
@@ -86,7 +86,7 @@ lazy val `core` = (project in file("modules/core"))
     },
     Test / fork := false
   )
-  .settings(commontSettings)
+  .settings(commonSettings)
 
 lazy val `iceberg` = (project in file("modules/iceberg"))
   .settings(
@@ -102,6 +102,6 @@ lazy val `iceberg` = (project in file("modules/iceberg"))
       excludeJars(cp)
     }
   )
-  .settings(commontSettings)
+  .settings(commonSettings)
 
 Global / cancelable := true

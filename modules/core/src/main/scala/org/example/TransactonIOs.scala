@@ -6,19 +6,20 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction.Context
 
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.duration._
-import scala.collection.JavaConverters._
+import scala.concurrent.duration.*
+import scala.jdk.CollectionConverters.*
 
 import java.sql.Timestamp
 
 case class Transaction(
     accountId: Long,
     timestamp: Long,
-    amount: Double
+    amount: Double,
+    loc: String = ""
 )
 
 object TransactionsSource:
-  val data =
+  private val data =
     Array(
       Transaction(1, 0L, 188.23),
       Transaction(2, 0L, 374.79),
@@ -97,7 +98,7 @@ object TransactionsSource:
 case class Alert(id: Long)
 
 class AlertSink extends SinkFunction[Alert]:
-  val logger = LoggerFactory.getLogger(classOf[AlertSink])
+  private val logger = LoggerFactory.getLogger(classOf[AlertSink])
 
   override def invoke(value: Alert, context: Context): Unit =
     logger.info(value.toString)

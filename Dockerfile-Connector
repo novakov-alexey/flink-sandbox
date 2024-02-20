@@ -2,15 +2,28 @@ FROM registry.ververica.com/v2.12/vvp-gateway:2.12.0
 
 # Iceberg Catalog
 COPY jars/catalog-meta.yaml /vvp/sql/opt/catalogs/iceberg/catalog-meta.yaml
-COPY jars/iceberg-flink-runtime-1.17-1.4.2.jar /vvp/sql/opt/catalogs/iceberg/iceberg-flink-runtime-1.17-1.4.2.jar
-COPY jars/hadoop-aws-2.8.3.jar /vvp/sql/opt/catalogs/iceberg
-COPY jars/flink-s3-fs-hadoop-1.17.1.jar /vvp/sql/opt/catalogs/iceberg
+COPY jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/catalogs/iceberg/
+COPY jars/hadoop-aws-2.8.3.jar /vvp/sql/opt/catalogs/iceberg/
+COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/catalogs/iceberg/
+
+# Paimon Catalog
+# COPY jars/paimon-catalog-meta.yaml /vvp/sql/opt/catalogs/paimon/catalog-meta.yaml
+# COPY jars/paimon-flink-1.18-0.6.0-incubating.jar /vvp/sql/opt/catalogs/paimon
+# COPY jars/flink-connector-files-1.18.0.jar /vvp/sql/opt/catalogs/paimon/
+# COPY jars/hadoop-aws-2.10.2.jar /vvp/sql/opt/catalogs/paimon/
+
 
 # Iceberg Connector
 COPY jars/connector-meta.yaml /vvp/sql/opt/connectors/iceberg/connector-meta.yaml
-COPY jars/iceberg-flink-runtime-1.17-1.4.2.jar /vvp/sql/opt/connectors/iceberg/iceberg-flink-runtime-1.17-1.4.2.jar
+COPY jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/connectors/iceberg/
 COPY jars/hadoop-aws-2.8.3.jar /vvp/sql/opt/connectors/iceberg/
-COPY jars/flink-s3-fs-hadoop-1.17.1.jar /vvp/sql/opt/connectors/iceberg/
+COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/connectors/iceberg/
+
+# Paimon Connector
+# COPY jars/paimon-connector-meta.yaml /vvp/sql/opt/connectors/paimon/connector-meta.yaml
+# COPY jars/paimon-flink-1.18-0.6.0-incubating.jar /vvp/sql/opt/connectors/paimon/
+# COPY jars/flink-connector-files-1.18.0.jar /vvp/sql/opt/connectors/paimon/
+# COPY jars/hadoop-aws-2.10.2.jar /vvp/sql/opt/connectors/paimon/
 
 # SQL Editor libraries for Iceberg
-COPY jars/flink-hadoop-fs-1.17.1.jar /vvp/app/lib/
+COPY jars/flink-hadoop-fs-1.18.0.jar /vvp/app/lib/

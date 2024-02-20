@@ -10,16 +10,15 @@ import org.apache.flink.configuration.RestOptions.BIND_PORT
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.typeinfo.TypeInformation
 
-import org.apache.hadoop.conf.{Configuration as HadoopCfg}
+import org.apache.hadoop.conf.Configuration as HadoopCfg
 
 import org.apache.iceberg.flink.TableLoader
-import org.apache.iceberg.flink.source.FlinkSource
 import org.apache.iceberg.flink.source.IcebergSource
 import org.apache.iceberg.flink.source.assigner.SimpleSplitAssignerFactory
 
-import scala.collection.JavaConverters.*
+import scala.jdk.CollectionConverters.*
 
-object TestApiTest:
+object tableApiTest:
 
   def main(args: Array[String]): Unit =
     val endpoint = args.headOption.getOrElse("http://minio:9000")
@@ -27,7 +26,7 @@ object TestApiTest:
 
     val config = Configuration.fromMap(
       Map(
-        ConfigConstants.LOCAL_START_WEBSERVER -> "true",
+        //ConfigConstants.LOCAL_START_WEBSERVER -> "true",
         BIND_PORT.key -> "8081",
         "execution.checkpointing.interval" -> "10 s"
       ).asJava

@@ -3,10 +3,9 @@ package org.example
 import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction
 import org.apache.flink.util.Collector
 import org.apache.flink.api.common.typeinfo.TypeInformation
-import org.apache.flink.api.common.state.ValueStateDescriptor
-
-import org.apache.flinkx.api._
-import org.apache.flinkx.api.serializers._
+import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 
 @main def ConnectedStreams =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -32,7 +31,7 @@ import org.apache.flinkx.api.serializers._
 class ControlFunction
     extends RichCoFlatMapFunction[Transaction, Transaction, Transaction]:
 
-  @transient lazy val state = getRuntimeContext.getState(
+  @transient lazy val state: ValueState[Double] = getRuntimeContext.getState(
     new ValueStateDescriptor(
       "joined-transaction",
       classOf[Double]
@@ -51,7 +50,7 @@ class ControlFunction
   ): Unit =
     sumUp(t, out)
 
-  private def sumUp(t: Transaction, out: Collector[Transaction]) =
+  private def sumUp(t: Transaction, out: Collector[Transaction]): Unit =
     Option(state.value()) match
       case Some(v) =>
         out.collect(t.copy(amount = t.amount + v))

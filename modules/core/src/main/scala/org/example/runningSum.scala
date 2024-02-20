@@ -14,7 +14,6 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction
 import org.apache.flink.util.Collector
 import org.apache.flink.configuration.Configuration
-import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner
 import org.apache.flink.api.common.state.ValueStateDescriptor
@@ -45,7 +44,7 @@ class CustomEventTimeTrigger[T, W <: TimeWindow](trigger: EventTimeTrigger)
       ctx: TriggerContext
   ): TriggerResult =
     val result = trigger.onElement(element, timestamp, window, ctx)
-    if result.isPurge() then TriggerResult.FIRE_AND_PURGE
+    if result.isPurge then TriggerResult.FIRE_AND_PURGE
     else TriggerResult.FIRE
 
   override def onProcessingTime(
@@ -63,12 +62,12 @@ class CustomEventTimeTrigger[T, W <: TimeWindow](trigger: EventTimeTrigger)
   override def clear(window: W, ctx: TriggerContext): Unit =
     trigger.clear(window, ctx)
 
-  override def canMerge(): Boolean = trigger.canMerge()
+  override def canMerge: Boolean = trigger.canMerge
 
   override def onMerge(window: W, ctx: OnMergeContext): Unit =
     trigger.onMerge(window, ctx)
 
-  override def toString(): String =
+  override def toString: String =
     s"CustomEventTimeTrigger(${trigger.toString})"
 
 def windowActionJ(
@@ -76,14 +75,14 @@ def windowActionJ(
     window: TimeWindow,
     input: _root_.java.lang.Iterable[TestEvent],
     out: Collector[TestEvent]
-) = windowAction(key, window, input.asScala, out)
+): Unit = windowAction(key, window, input.asScala, out)
 
 def windowAction(
     key: Long,
     window: TimeWindow,
     input: Iterable[TestEvent],
     out: Collector[TestEvent]
-) =
+): Unit =
   val reduced = input.reduce(reduceEvents)
   val output =
     reduced.copy(
@@ -92,7 +91,7 @@ def windowAction(
         if reduced.runningCount > 0 then reduced.runningCount else 1
     )
   println(
-    s"\n{start: ${window.getStart()} .. end: ${window.getEnd()}, count: ${output.runningCount} \ninput: "
+    s"\n{start: ${window.getStart} .. end: ${window.getEnd}, count: ${output.runningCount} \ninput: "
   )
   println(input.mkString(" ", "\n", ""))
 
@@ -141,7 +140,7 @@ class RunningCountFunc(windowSize: Duration)
   var minTimestamp: ValueState[Long] = _
   var timeToCount: MapState[Long, Long] = _
   override def open(parameters: Configuration): Unit =
-    timeToCount = getRuntimeContext().getMapState(
+    timeToCount = getRuntimeContext.getMapState(
       MapStateDescriptor("timestamp2count", classOf[Long], classOf[Long])
     )
 
@@ -164,7 +163,7 @@ class RunningCountFunc(windowSize: Duration)
       else 0
     timeToCount.put(event.timestamp, currentCount + 1)
 
-    val windowStart = event.timestamp - windowSize.getSeconds() * 1000
+    val windowStart = event.timestamp - windowSize.getSeconds * 1000
     val windowCount =
       timeToCount.entries().asScala.foldLeft(0L) { (acc, entry) =>
         if (windowStart < entry.getKey) && (entry.getKey <= event.timestamp)
@@ -193,10 +192,9 @@ class RunningCountFunc(windowSize: Duration)
     val oldEntries = timeToCount
       .entries()
       .asScala
-      .collect(entry =>
-        entry match
-          case _ if entry.getKey < minTimestamp.value() => entry.getKey
-      )
+      .collect {
+        case entry if entry.getKey < minTimestamp.value() => entry.getKey
+      }
     oldEntries.foreach(timeToCount.remove)
 
 /*

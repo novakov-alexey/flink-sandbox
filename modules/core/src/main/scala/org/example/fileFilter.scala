@@ -8,8 +8,6 @@ import org.apache.flink.connector.file.src.reader.TextLineInputFormat
 import org.apache.flink.connector.file.src.enumerate.NonSplittingRecursiveEnumerator
 import org.apache.flink.core.fs.Path
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
-import org.apache.flink.connector.file.src.impl.StreamFormatAdapter
-import org.apache.flink.connector.file.sink.FileSink
 import org.apache.flink.configuration.Configuration
 
 import java.io.File
@@ -20,7 +18,7 @@ class MyDefaultFileFilter extends Predicate[Path]:
   override def test(path: Path): Boolean =
     print(s"S3 FILE PATH: $path")
 
-    val fileName = path.getName()
+    val fileName = path.getName
     println(s", name: $fileName")
 
     fileName.headOption match

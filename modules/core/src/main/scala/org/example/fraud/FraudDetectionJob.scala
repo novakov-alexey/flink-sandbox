@@ -1,4 +1,4 @@
-package org.example
+package org.example.fraud
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,8 +20,10 @@ package org.example
 
 
 import java.io.File
+
 import org.apache.flinkx.api.*
 import org.apache.flinkx.api.serializers.*
+
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows
@@ -29,20 +31,15 @@ import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext
 import org.apache.flink.streaming.api.functions.source.FromIteratorFunction
 import org.apache.flink.configuration.Configuration
+import org.apache.flink.runtime.state.hashmap.HashMapStateBackend
+import org.apache.flink.state.api.SavepointReader
+
 import org.example.Transaction
 import org.example.TransactionsSource
 import org.example.Alert
 import org.example.AlertSink
-import Givens.given
-import org.apache.flink.runtime.state.hashmap.HashMapStateBackend
-import org.apache.flink.state.api.SavepointReader
 
-object Givens:
-  given tranTypeInfo: TypeInformation[Transaction] =
-    TypeInformation.of(classOf[Transaction])
-  given alertTypeInfo: TypeInformation[Alert] =
-    TypeInformation.of(classOf[Alert])
-  given keyedStateInfo: TypeInformation[KeyedFraudState] = TypeInformation.of(classOf[KeyedFraudState]) 
+import Givens.given
 
 @main def runningAvg =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -76,7 +73,7 @@ object Givens:
   conf.setString("execution.checkpointing.min-pause", "3s")
   conf.setString("state.backend", "filesystem")
 
-  val env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf)
+  val env = StreamExecutionEnvironment.getExecutionEnvironment //.createLocalEnvironmentWithWebUI(conf)
 
   val transactions = env
     .addSource(TransactionsSource.iterator)

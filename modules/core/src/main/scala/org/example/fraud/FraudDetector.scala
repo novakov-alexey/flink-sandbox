@@ -1,4 +1,4 @@
-package org.example
+package org.example.fraud
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,12 +18,12 @@ package org.example
  * limitations under the License.
  */
 
-
 import org.apache.flinkx.api.*
 import org.apache.flinkx.api.serializers.*
 
 import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
 import org.apache.flink.api.common.functions.RuntimeContext
+import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction
 import org.apache.flink.state.api.functions.KeyedStateReaderFunction
@@ -37,9 +37,18 @@ import scala.concurrent.duration.*
 
 import FraudDetector.*
 
+object Givens:
+  given tranTypeInfo: TypeInformation[Transaction] =
+    deriveTypeInformation[Transaction]
+  given alertTypeInfo: TypeInformation[Alert] =
+    TypeInformation.of(classOf[Alert])
+  given keyedStateInfo: TypeInformation[KeyedFraudState] =
+    TypeInformation.of(classOf[KeyedFraudState])
+
 case class FraudStateVars(
     flagState: ValueState[Boolean],
-    timerState: ValueState[Long]
+    timerState: ValueState[Long],
+    lastTransaction: ValueState[Transaction]
 ):
   def clear(): Unit =
     flagState.clear()
@@ -53,10 +62,13 @@ object FraudDetector:
   def readState(context: RuntimeContext): FraudStateVars =
     FraudStateVars(
       context.getState(
-        ValueStateDescriptor("flag", classOf[Boolean])
+        ValueStateDescriptor("flag", boolInfo)
       ),
       context.getState(
-        ValueStateDescriptor("timer-state", classOf[Long])
+        ValueStateDescriptor("timer-state", longInfo)
+      ),
+      context.getState(
+        ValueStateDescriptor("last-transaction", Givens.tranTypeInfo)
       )
     )
 
@@ -69,10 +81,11 @@ class ReaderFunction extends KeyedStateReaderFunction[Long, KeyedFraudState]:
     fraudState = readState(getRuntimeContext)
 
   override def readKey(
-    key: Long,
-    ctx: Context,
-    out: Collector[KeyedFraudState]): Unit =
-    out.collect(KeyedFraudState(key, fraudState))  
+      key: Long,
+      ctx: Context,
+      out: Collector[KeyedFraudState]
+  ): Unit =
+    out.collect(KeyedFraudState(key, fraudState))
 
 @SerialVersionUID(1L)
 class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
@@ -82,6 +95,7 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
 
   override def open(parameters: Configuration): Unit =
     fraudState = readState(getRuntimeContext)
+    logger.info(s"Loaded last transaction: ${fraudState.lastTransaction}")
 
   @throws[Exception]
   def processElement(
@@ -111,6 +125,8 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       context.timerService.registerProcessingTimeTimer(timer)
       fraudState.timerState.update(timer)
       logger.info(s"small amount: ${transaction.amount}")
+
+      fraudState.lastTransaction.update(transaction)
 
   override def onTimer(
       timestamp: Long,
