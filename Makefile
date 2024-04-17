@@ -14,8 +14,16 @@ build-scala-image:
 build-apache-scala-image:
 	docker build -t flink:1.15.2-my-job-scala3 .
 
+build_no=36
 build-gateway:
-	docker build -t eu.gcr.io/da-fe-212612/vvp/vvp-gateway:2.12.0-iceberg-15 -f Dockerfile-Connector .
+	cd docker-input
+	docker build -t eu.gcr.io/da-fe-212612/vvp/vvp-gateway:2.12.0-connectors-$(build_no) -f Dockerfile-Connector .
+	docker push eu.gcr.io/da-fe-212612/vvp/vvp-gateway:2.12.0-connectors-$(build_no)
+
+flink_build_no=70
+build-flink:	
+	cd docker-input && docker build -t eu.gcr.io/da-fe-212612/flink/flink:1.18.0-stream1-j11-iceberg-$(flink_build_no) -f Dockerfile-Flink .
+	docker push eu.gcr.io/da-fe-212612/flink/flink:1.18.0-stream1-j11-iceberg-$(flink_build_no)
 
 launch-app:
 	flink run-application -p 3 -t kubernetes-application \

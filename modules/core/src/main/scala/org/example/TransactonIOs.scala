@@ -73,7 +73,7 @@ object TransactionsSource:
       Transaction(5, 0L, 292.44)
     )
 
-  val iterator: FromIteratorFunction[Transaction] =
+  def iterator(sleepBeforeEmit: Long = 100): FromIteratorFunction[Transaction] =
     FromIteratorFunction[Transaction](
       (new Iterator[Transaction] with Serializable:
         var rows = data.iterator

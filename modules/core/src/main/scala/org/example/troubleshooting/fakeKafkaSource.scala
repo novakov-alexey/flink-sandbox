@@ -44,6 +44,7 @@ class FakeKafkaSource(
 
   override def open(parameters: Configuration): Unit =
     println(s"Now reading from partitions: $assignedPartitions")
+    
   override def run(ctx: SourceContext[FakeKafkaRecord]): Unit =
     if assignedPartitions.nonEmpty then
       while !cancelled do {

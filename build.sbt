@@ -13,14 +13,14 @@ organization := "org.example"
 ThisBuild / scalaVersion := "3.3.1"
 ThisBuild / scalacOptions ++= Seq("-new-syntax", "-rewrite")
 
-val flinkVersion = "1.18.0"
+val flinkVersion = "1.18.1"
 val flinkMajorAndMinorVersion =
   flinkVersion.split("\\.").toList.take(2).mkString(".")
 
 val log4jVersion = "2.17.1"
 
 val flinkDependencies = Seq(
-  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.2")
+  ("org.flinkextended" %% "flink-scala-api" % s"${flinkVersion}_1.1.4")
     .excludeAll(
       ExclusionRule(organization = "org.apache.flink"),
       ExclusionRule(organization = "org.scalameta"),
@@ -76,8 +76,8 @@ def excludeJars(cp: Classpath) =
 lazy val `core` = (project in file("modules/core"))
   .settings(
     libraryDependencies ++= flinkDependencies ++ Seq(
-      "ch.qos.logback" % "logback-classic" % "1.4.7" % Provided,
-      "io.bullet" %% "borer-core" % "1.10.2" % Provided
+      "ch.qos.logback" % "logback-classic" % "1.4.14" % Provided,
+      "io.bullet" %% "borer-core" % "1.14.0" % Provided
     ),
     assemblyPackageScala / assembleArtifact := false,
     assembly / assemblyExcludedJars := {
@@ -91,7 +91,7 @@ lazy val `core` = (project in file("modules/core"))
 lazy val `iceberg` = (project in file("modules/iceberg"))
   .settings(
     libraryDependencies ++= flinkDependencies ++ Seq(
-      "org.apache.iceberg" % "iceberg-flink-runtime-1.17" % "1.4.2" % Provided,
+      "org.apache.iceberg" % "iceberg-flink-runtime-1.17" % "1.4.3" % Provided,
       "org.apache.hadoop" % "hadoop-common" % "3.3.4" % Provided,
       "org.apache.hadoop" % "hadoop-aws" % "3.3.4" % Provided,
       "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "3.3.4" % Provided

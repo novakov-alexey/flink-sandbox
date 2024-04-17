@@ -1,0 +1,19 @@
+FROM registry.ververica.com/v2.12/flink:1.18.0-stream1-scala_2.12-java11
+
+COPY jars/hadoop-3.3.4/share/hadoop/common/lib/* ../opt/hadoop/
+COPY jars/hadoop-3.3.4/share/hadoop/common/hadoop-common-3.3.4.jar ../opt/hadoop/
+COPY jars/hadoop-3.3.4/share/hadoop/hdfs/hadoop-hdfs-client-3.3.4.jar ../opt/hadoop/
+COPY jars/hadoop-3.3.4/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.3.4.jar ../opt/hadoop/
+
+# For JAR Based Deployments
+COPY jars/hadoop-aws-3.3.4.jar ../lib/
+COPY jars/aws-java-sdk-core-1.12.262.jar ../lib/
+COPY jars/aws-java-sdk-s3-1.12.262.jar ../lib/
+COPY jars/aws-java-sdk-dynamodb-1.12.262.jar ../lib/
+COPY jars/joda-time-2.12.7.jar ../lib/
+COPY jars/iceberg-flink-runtime-1.17-1.4.3.jar ../lib/
+
+ENV HADOOP_CLASSPATH="/flink/opt/hadoop/*"
+
+# For own Scala version, remove Flink's Scala jar
+RUN rm /flink/lib/flink-scala_2.12-1.18.0-stream1.jar

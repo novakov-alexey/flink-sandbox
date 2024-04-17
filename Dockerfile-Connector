@@ -1,10 +1,10 @@
-FROM registry.ververica.com/v2.12/vvp-gateway:2.12.0
+FROM registry.ververica.com/v2.12/vvp-gateway:2.12.1
 
 # Iceberg Catalog
-COPY jars/catalog-meta.yaml /vvp/sql/opt/catalogs/iceberg/catalog-meta.yaml
-COPY jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/catalogs/iceberg/
-COPY jars/hadoop-aws-2.8.3.jar /vvp/sql/opt/catalogs/iceberg/
-COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/catalogs/iceberg/
+COPY docker-input/catalog-meta.yaml /vvp/sql/opt/catalogs/iceberg/catalog-meta.yaml
+COPY docker-input/jars/hadoop-aws-3.3.4.jar /vvp/sql/opt/catalogs/iceberg/
+COPY docker-input/jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/catalogs/iceberg/
+COPY docker-input/jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/catalogs/iceberg/
 
 # Paimon Catalog
 # COPY jars/paimon-catalog-meta.yaml /vvp/sql/opt/catalogs/paimon/catalog-meta.yaml
@@ -14,10 +14,10 @@ COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/catalogs/iceberg/
 
 
 # Iceberg Connector
-COPY jars/connector-meta.yaml /vvp/sql/opt/connectors/iceberg/connector-meta.yaml
-COPY jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/connectors/iceberg/
-COPY jars/hadoop-aws-2.8.3.jar /vvp/sql/opt/connectors/iceberg/
-COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/connectors/iceberg/
+COPY docker-input/connector-meta.yaml /vvp/sql/opt/connectors/iceberg/connector-meta.yaml
+COPY docker-input/jars/iceberg-flink-runtime-1.17-1.4.3.jar /vvp/sql/opt/connectors/iceberg/
+COPY docker-input/jars/hadoop-aws-3.3.4.jar /vvp/sql/opt/connectors/iceberg/
+COPY docker-input/jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/connectors/iceberg/
 
 # Paimon Connector
 # COPY jars/paimon-connector-meta.yaml /vvp/sql/opt/connectors/paimon/connector-meta.yaml
@@ -26,4 +26,4 @@ COPY jars/flink-s3-fs-hadoop-1.18.0.jar /vvp/sql/opt/connectors/iceberg/
 # COPY jars/hadoop-aws-2.10.2.jar /vvp/sql/opt/connectors/paimon/
 
 # SQL Editor libraries for Iceberg
-COPY jars/flink-hadoop-fs-1.18.0.jar /vvp/app/lib/
+COPY docker-input/jars/flink-hadoop-fs-1.18.0.jar /vvp/app/lib/

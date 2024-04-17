@@ -41,11 +41,11 @@ import org.example.AlertSink
 
 import Givens.given
 
-@main def runningAvg =
+@main def runningAvg(sleepBeforeEmit: Long) =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
   val transactions = env
-    .addSource(TransactionsSource.iterator)
+    .addSource(TransactionsSource.iterator(sleepBeforeEmit))
     .name("transactions")
 
   transactions
@@ -62,7 +62,7 @@ import Givens.given
 
   env.execute("Fraud Detection")
 
-@main def FraudDetectionJob =
+@main def FraudDetectionJob(sleepBeforeEmit: Long) =
   val conf = Configuration()
   conf.setString("state.savepoints.dir", "file:///tmp/savepoints")
   conf.setString(
@@ -76,7 +76,7 @@ import Givens.given
   val env = StreamExecutionEnvironment.getExecutionEnvironment //.createLocalEnvironmentWithWebUI(conf)
 
   val transactions = env
-    .addSource(TransactionsSource.iterator)
+    .addSource(TransactionsSource.iterator(sleepBeforeEmit))
     .name("transactions")
     .union()
 
@@ -128,7 +128,7 @@ class MaxAggregate
   )
 
   val transactions = env
-    .addSource(TransactionsSource.iterator)
+    .addSource(TransactionsSource.iterator(100))
     .name("transactions")
 
   transactions

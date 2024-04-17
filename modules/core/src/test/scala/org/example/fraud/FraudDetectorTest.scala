@@ -15,7 +15,7 @@ import org.apache.flink.streaming.api.operators.StreamFlatMap
 import org.apache.flink.configuration.Configuration
 
 import scala.collection.mutable.ListBuffer
-import org.example.FraudDetector
+import org.example.fraud.FraudDetector
 
 class FraudDetectorTest extends AnyFlatSpec with Matchers:
 

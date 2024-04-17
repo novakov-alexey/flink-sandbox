@@ -1,0 +1,17 @@
+
+connector:
+  type: paimon
+  packaged: true
+  source: true
+  sink: true
+  lookup: false
+  properties:
+  - key: connector
+    required: true
+    description: Must be set to 'paimon' to configure this connector.
+    defaultValue: iceberg
+  - key: merge-engine
+    required: false
+    description: Specify the merge engine for table with primary key. Possible values are "deduplicate" - De-duplicate and keep the last row. "partial-update" - Partial update non-null fields. "aggregation" - Aggregate fields with same primary key. "first-row" - De-duplicate and keep the first row.
+    defaultValue: deduplicate  
+  

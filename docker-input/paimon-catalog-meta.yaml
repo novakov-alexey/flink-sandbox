@@ -1,0 +1,16 @@
+catalog:
+  type: paimon
+  packaged: true
+  properties:
+    - key: type
+      required: true
+      description: Must be set to 'paimon' to configure this catalog.    
+    - key: warehouse
+      required: false
+      description: The warehouse root path of catalog.
+    - key: metastore
+      required: false
+      description: Metastore of paimon catalog, supports filesystem and hive. Defaults to filesystem      
+    - key: uri
+      required: false
+      description: Uri of metastore server.

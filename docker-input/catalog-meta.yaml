@@ -1,0 +1,28 @@
+catalog:
+  type: iceberg
+  packaged: true
+  properties:
+    - key: type
+      required: true
+      description: Must be set to 'iceberg' to configure this catalog.
+    - key: catalog-type
+      required: false
+      description: hive, hadoop or rest for built-in catalogs, or left unset for custom catalog implementations using catalog-impl
+    - key: catalog-database
+      required: false
+      description: default database name
+    - key: catalog-impl
+      required: false
+      description: The fully-qualified class name of a custom catalog implementation. Must be set if catalog-type is unset
+    - key: property-version
+      required: false
+      description: Version number to describe the property version. This property can be used for backwards compatibility in case the property format changes. The current property version is 1
+    - key: cache-enable
+      required: false
+      description: Whether to enable catalog cache, default value is true
+    - key: cache.expiration-interval-ms
+      required: false
+      description: How long catalog entries are locally cached, in milliseconds; negative values like -1 will disable expiration, value 0 is not allowed to set. default value is -1
+    - key: warehouse
+      required: false
+      description: The Hive warehouse location, users should specify this path if neither set the hive-conf-dir to specify a location containing a hive-site.xml configuration file nor add a correct hive-site.xml to classpath
