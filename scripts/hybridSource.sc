@@ -1,4 +1,4 @@
-//> using dep "org.flinkextended::flink-scala-api:1.17.1_1.0.0"
+//> using dep "org.flinkextended::flink-scala-api:1.17.2_1.1.2"
 //> using dep "org.apache.flink:flink-clients:1.17.1"
 //> using dep "org.apache.flink:flink-csv:1.17.1"
 //> using dep "org.apache.flink:flink-connector-files:1.17.1"

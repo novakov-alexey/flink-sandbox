@@ -10,8 +10,7 @@ import org.apache.flinkx.api.serializers.*
 @main def ConnectedStreams =
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
-  given tranTypeInfo: TypeInformation[Transaction] =
-    TypeInformation.of(classOf[Transaction])
+  given tranTypeInfo: TypeInformation[Transaction] = deriveTypeInformation
 
   val control = env
     .addSource(TransactionsSource.iterator())

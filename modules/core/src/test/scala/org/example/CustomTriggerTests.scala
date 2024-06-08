@@ -29,9 +29,9 @@ import org.apache.flink.api.common.ExecutionConfig
 import org.apache.flink.api.common.state.ReducingStateDescriptor
 import org.apache.flink.util.Collector
 
-import _root_.java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit
 
-import scala.collection.JavaConverters._
+import scala.collection.JavaConverters.*
 
 class CustomTriggerTest extends AnyFlatSpec with Matchers with Inspectors:
 

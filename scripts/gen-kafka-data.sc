@@ -1,4 +1,4 @@
-//> using dep "org.flinkextended::flink-scala-api:1.17.1_1.0.0"
+//> using dep "org.flinkextended::flink-scala-api:1.17.2_1.1.2"
 //> using dep "org.apache.flink:flink-clients:1.17.1"
 //> using dep "org.apache.flink:flink-csv:1.17.1"
 //> using dep "org.apache.flink:flink-connector-files:1.17.1"
@@ -8,10 +8,10 @@
 
 import org.apache.flink.table.api._
 import org.apache.flink.connector.datagen.table.DataGenConnectorOptions
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.apache.flinkx.api._
+import org.apache.flinkx.api.serializers._
 
-import _root_.java.lang.{Long => JLong}
+import java.lang.{Long => JLong}
 
 val env = StreamExecutionEnvironment.getExecutionEnvironment
 val settings = EnvironmentSettings.newInstance.inStreamingMode.build

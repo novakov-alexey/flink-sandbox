@@ -51,7 +51,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(`core`, `iceberg`)
+  .aggregate(`core`, `iceberg`, `protobuf`)
   .settings(
     publish / skip := true
   )
@@ -103,5 +103,8 @@ lazy val `iceberg` = (project in file("modules/iceberg"))
     }
   )
   .settings(commonSettings)
+
+lazy val `protobuf` =
+  (project in file("modules/protobuf")).enablePlugins(ProtobufPlugin)
 
 Global / cancelable := true
