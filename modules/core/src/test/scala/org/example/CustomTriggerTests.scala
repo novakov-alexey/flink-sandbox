@@ -55,7 +55,7 @@ class CustomTriggerTest extends AnyFlatSpec with Matchers with Inspectors:
       SlidingEventTimeWindows.of(windowSize, windowSlide),
       TimeWindow.Serializer(),
       (e: TestEvent) => e.key,
-      TypeInformation.of(classOf[Long]).createSerializer(cfg),
+      longInfo.createSerializer(cfg),
       stateDesc,
       InternalSingleValueWindowFunction(windowActionJ _),
       CustomEventTimeTrigger(EventTimeTrigger.create()),
@@ -67,7 +67,7 @@ class CustomTriggerTest extends AnyFlatSpec with Matchers with Inspectors:
       KeyedOneInputStreamOperatorTestHarness[Long, TestEvent, TestEvent](
         operator,
         e => e.key,
-        TypeInformation.of(classOf[Long])
+        longInfo
       )
 
     testHarness.setup(serializer)

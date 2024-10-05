@@ -139,6 +139,7 @@ class RunningCountFunc(windowSize: Duration)
   val oldEntriesCleanupInterval = 1000L
   var minTimestamp: ValueState[Long] = _
   var timeToCount: MapState[Long, Long] = _
+  
   override def open(parameters: Configuration): Unit =
     timeToCount = getRuntimeContext.getMapState(
       MapStateDescriptor("timestamp2count", classOf[Long], classOf[Long])
