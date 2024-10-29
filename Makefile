@@ -9,21 +9,10 @@ build-local-image:
 	nerdctl --namespace=k8s.io build -t local/flink:1.15.2-stream3-no-scala -f Dockerfile-Ververica .
 
 build-scala-image:
-	docker build -t flink:1.17.2-stream1-no-scala -f Dockerfile-Ververica .
+	docker build -t flink:1.18.1-scala3 -f Dockerfile-Ververica .
 
 build-apache-scala-image:
 	docker build -t flink:1.15.2-my-job-scala3 .
-
-build_no=36
-build-gateway:
-	cd docker-input
-	docker build -t eu.gcr.io/da-fe-212612/vvp/vvp-gateway:2.12.0-connectors-$(build_no) -f Dockerfile-Connector .
-	docker push eu.gcr.io/da-fe-212612/vvp/vvp-gateway:2.12.0-connectors-$(build_no)
-
-flink_build_no=70
-build-flink:	
-	cd docker-input && docker build -t eu.gcr.io/da-fe-212612/flink/flink:1.18.0-stream1-j11-iceberg-$(flink_build_no) -f Dockerfile-Flink .
-	docker push eu.gcr.io/da-fe-212612/flink/flink:1.18.0-stream1-j11-iceberg-$(flink_build_no)
 
 launch-app:
 	flink run-application -p 3 -t kubernetes-application \
@@ -37,3 +26,9 @@ launch-app:
 
 start-ammonite:
 	amm --predef scripts/flink-amm.sc	
+
+build-remote-jar:
+	scala-cli --power package scripts/WordCountApp.scala -o WordCountApp.jar --force
+
+run-remote-jar:
+	scala-cli run scripts/WordCountApp.scala --suppress-outdated-dependency-warning
