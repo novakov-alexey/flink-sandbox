@@ -1,27 +1,26 @@
 import $cp.lib.`flink-faker-0.4.0.jar`
 
-import $ivy.`org.flinkextended::flink-scala-api:1.15.4_1.0.0`
-import $ivy.`org.apache.flink:flink-clients:1.15.2`
-import $ivy.`org.apache.flink:flink-csv:1.15.2`
-import $ivy.`org.apache.flink:flink-table-api-java:1.15.2`
-import $ivy.`org.apache.flink:flink-table-api-java-bridge:1.15.2`
-import $ivy.`org.apache.flink:flink-table-runtime:1.15.2`
-import $ivy.`org.apache.flink:flink-table-planner-loader:1.15.2`
+import $ivy.`org.flinkextended::flink-scala-api:1.17.1_1.1.0`
+import $ivy.`org.apache.flink:flink-clients:1.17.1`
+import $ivy.`org.apache.flink:flink-csv:1.17.1`
+import $ivy.`org.apache.flink:flink-table-api-java:1.17.1`
+import $ivy.`org.apache.flink:flink-table-api-java-bridge:1.17.1`
+import $ivy.`org.apache.flink:flink-table-runtime:1.17.1`
+import $ivy.`org.apache.flink:flink-table-planner-loader:1.17.1`
 
 import org.apache.flink.table.api._
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment
 import org.apache.flink.connector.datagen.table.DataGenConnectorOptions
 
-import org.apache.flink.api._
-import org.apache.flink.api.serializers._
+import org.apache.flinkx.api._
+import org.apache.flinkx.api.serializers._
 
-import _root_.java.lang.{Long => JLong}
+import java.lang.{Long => JLong}
 
 val env = StreamExecutionEnvironment.getExecutionEnvironment
 val tEnv = StreamTableEnvironment.create(env.getJavaEnv)
 val settings = EnvironmentSettings.newInstance().inStreamingMode().build()
 val table = TableEnvironment.create(settings)
-
 
 // table.createTemporaryTable(
 //   "SourceTable",

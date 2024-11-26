@@ -24,9 +24,14 @@ import org.apache.flink.configuration.{
   RestOptions
 }
 
-@main def wordCountApp =    
+/**
+ * Word Cound example running job remotely (session cluster)
+ * 
+ * @jmHost - Job Manager hostname to submit job remotely
+ * sessioncluster-7e217a55-4ac7-466c-a6c9-0d48eea73204-jobmanager
+ */
+@main def wordCountApp(jmHost: String) =    
   val restPort = 8081
-  val jmHost = "sessioncluster-7e217a55-4ac7-466c-a6c9-0d48eea73204-jobmanager"
 
   val cfg = Configuration()
   cfg.setString(JobManagerOptions.ADDRESS, jmHost)
@@ -36,10 +41,11 @@ import org.apache.flink.configuration.{
   cfg.setString(RestOptions.ADDRESS, jmHost)
   cfg.setInteger(RestOptions.PORT, restPort)
 
+  val localMavenPath = s"${sys.props("user.home")}/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2"
   val jars = List(
     "./WordCountApp.jar",
-    s"${sys.props("user.home")}/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.6.1/scala3-library_3-3.6.1.jar",
-    s"${sys.props("user.home")}/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15.jar"
+    s"$localMavenPath/org/scala-lang/scala3-library_3/3.6.1/scala3-library_3-3.6.1.jar",
+    s"$localMavenPath/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15.jar"
   )
   val javaEnv = JavaEnv.createRemoteEnvironment(jmHost, restPort, cfg, jars*)
   val env = StreamExecutionEnvironment(javaEnv)

@@ -1,4 +1,4 @@
-FROM registry.ververica.com/v2.13/flink:1.18.1-stream4-scala_2.12-java11
-RUN rm /flink/lib/flink-scala_2.12-1.18.1-stream4.jar
+FROM registry.ververica.com/v2.13/flink:1.19.0-stream2-scala_2.12-java11
+RUN rm /flink/lib/flink-scala_2.12-1.19.0-stream2.jar
 ADD https://repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.6.1/scala3-library_3-3.6.1.jar /flink/lib/
 ADD https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15.jar /flink/lib/

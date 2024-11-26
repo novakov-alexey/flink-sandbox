@@ -1,15 +1,18 @@
-//> using dep "org.flinkextended::flink-scala-api:1.17.2_1.1.2"
-//> using dep "org.apache.flink:flink-clients:1.17.1"
-//> using dep "org.apache.flink:flink-csv:1.17.1"
-//> using dep "org.apache.flink:flink-connector-files:1.17.1"
-//> using dep "org.apache.flink:flink-connector-kafka:1.17.1"
-//> using dep "org.apache.flink:flink-table-runtime:1.17.1"
-//> using dep "org.apache.flink:flink-table-planner-loader:1.17.1"
+//> using scala 3.5.1
 
-import org.apache.flink.table.api._
+//> using dep "org.flinkextended::flink-scala-api:1.19.1_1.2.0"
+//> using dep "org.apache.flink:flink-clients:1.19.1"
+
+//> using dep "org.apache.flink:flink-csv:1.19.1"
+//> using dep "org.apache.flink:flink-connector-files:1.19.1"
+//> using dep "org.apache.flink:flink-connector-kafka:3.2.0-1.19"
+//> using dep "org.apache.flink:flink-table-runtime:1.19.1"
+//> using dep "org.apache.flink:flink-table-planner-loader:1.19.1"
+
+import org.apache.flink.table.api.*
 import org.apache.flink.connector.datagen.table.DataGenConnectorOptions
-import org.apache.flinkx.api._
-import org.apache.flinkx.api.serializers._
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 
 import java.lang.{Long => JLong}
 
@@ -34,7 +37,7 @@ table.createTemporaryTable(
     .build
 )
 
-val brokers = "confluentkafka-cp-kafka:9092"
+val brokers = "confluentkafkacpkafka:9092"
 
 table.createTemporaryTable(
   "SinkTable",
