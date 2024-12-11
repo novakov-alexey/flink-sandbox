@@ -13,7 +13,6 @@ import org.apache.flink.table.api.*
 import org.apache.flink.connector.datagen.table.DataGenConnectorOptions
 import org.apache.flinkx.api.*
 import org.apache.flinkx.api.serializers.*
-
 import java.lang.{Long => JLong}
 
 val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -33,7 +32,7 @@ table.createTemporaryTable(
     .option(DataGenConnectorOptions.NUMBER_OF_ROWS, JLong(1000))
     .option("fields.id.kind", "sequence")
     .option("fields.id.start", "10001")
-    .option("fields.id.end",   "20000")
+    .option("fields.id.end", "20000")
     .build
 )
 

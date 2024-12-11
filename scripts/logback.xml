@@ -17,6 +17,7 @@
 
     <logger name="org.apache.flink.runtime" level="OFF"/>
     <logger name="org.apache.flink.streaming.runtime" level="OFF"/>
+    <logger name="org.apache.flink.api.java.typeutils" level="WARN"/>
     
     <root level="INFO">
         <appender-ref ref="ASYNCSTDOUT"/>

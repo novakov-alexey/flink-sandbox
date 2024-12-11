@@ -6,10 +6,12 @@ create-image-secret:
 		-n vvp-jobs
 
 build-local-image:
-	nerdctl --namespace=k8s.io build -t local/flink:1.15.2-stream3-no-scala -f Dockerfile-Ververica .
+	nerdctl --namespace=k8s.io build -t local/flink:1.19.0-stream2-scala_2.12-java11 -f Dockerfile-Ververica .
 
 build-scala-image:
-	docker build -t flink:1.18.1-scala3 -f Dockerfile-Ververica .
+	cd docker && docker build -t flink:1.19.0-stream2-scala_2.12-java11 -f Dockerfile-Ververica .
+tag-scala-image:
+	cd docker && docker tag flink:1.19.0-stream2-scala_2.12-java11 eu.gcr.io/da-fe-212612/flink:1.19.0-stream2-scala_2.12-java11
 
 build-apache-scala-image:
 	docker build -t flink:1.15.2-my-job-scala3 .
