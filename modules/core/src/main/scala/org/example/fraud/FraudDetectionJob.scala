@@ -96,7 +96,7 @@ import Givens.given
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   val savepoint = SavepointReader.read(env.getJavaEnv, "///tmp/savepoints/savepoint-827976-a94a8feb6c07",
     HashMapStateBackend())
-  val keyedState = savepoint.readKeyedState("fraud-state", ReaderFunction(), TypeInformation.of(classOf[Long]), keyedStateInfo)
+  val keyedState = savepoint.readKeyedState("fraud-state", ReaderFunction(), longInfo, keyedStateInfo)
   keyedState.print()
   env.execute()
 

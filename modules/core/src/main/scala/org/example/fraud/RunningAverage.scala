@@ -1,7 +1,7 @@
 package org.example.fraud
 
-import org.apache.flinkx.api._
-import org.apache.flinkx.api.serializers._
+import org.apache.flinkx.api.*
+import org.apache.flinkx.api.serializers.*
 
 import org.apache.flink.api.common.functions.RichMapFunction
 import org.apache.flink.api.common.state.ValueStateDescriptor
@@ -12,19 +12,16 @@ import org.example.Transaction
 class RunningAverage
     extends RichMapFunction[Transaction, (Transaction, Double)]:
 
-  given tranTypeInfo: TypeInformation[Transaction] =
-    TypeInformation.of(classOf[Transaction])
-
   @transient lazy val runningAvg = getRuntimeContext.getState(
     ValueStateDescriptor(
       "running-average",
-      classOf[Double],
+      doubleInfo,
       0d
     )
   )
 
   @transient lazy val count = getRuntimeContext.getState(
-    ValueStateDescriptor("count", classOf[Int], 0)
+    ValueStateDescriptor("count", intInfo, 0)
   )
 
   private def threadName = Thread.currentThread.getName

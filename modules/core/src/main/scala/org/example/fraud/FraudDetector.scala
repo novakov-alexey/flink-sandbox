@@ -40,27 +40,16 @@ import FraudDetector.*
 object Givens:
   given tranTypeInfo: TypeInformation[Transaction] =
     deriveTypeInformation[Transaction]
-  given alertTypeInfo: TypeInformation[Alert] =
-    TypeInformation.of(classOf[Alert])
   given keyedStateInfo: TypeInformation[KeyedFraudState] =
-    TypeInformation.of(classOf[KeyedFraudState])
-
-case class FraudStateVars(
-    flagState: ValueState[Boolean],
-    timerState: ValueState[Long],
-    lastTransaction: ValueState[Transaction]
-):
-  def clear(): Unit =
-    flagState.clear()
-    timerState.clear()
+    deriveTypeInformation[KeyedFraudState]
 
 object FraudDetector:
   val SmallAmount = 1.00
   val LargeAmount = 500.00
   val OneMinute: Long = 1.minute.toMillis
 
-  def readState(context: RuntimeContext): FraudStateVars =
-    FraudStateVars(
+  def readState(context: RuntimeContext) =
+    (
       context.getState(
         ValueStateDescriptor("flag", boolInfo)
       ),
@@ -72,30 +61,52 @@ object FraudDetector:
       )
     )
 
-case class KeyedFraudState(key: Long, state: FraudStateVars)
+case class KeyedFraudState(
+    key: Long,
+    flagState: Boolean,
+    timerState: Long,
+    lastTransaction: Transaction
+)
 
 class ReaderFunction extends KeyedStateReaderFunction[Long, KeyedFraudState]:
-  var fraudState: FraudStateVars = _
+  var flagState: ValueState[Boolean] = _
+  var timerState: ValueState[Long] = _
+  var lastTransaction: ValueState[Transaction] = _
 
   override def open(parameters: Configuration): Unit =
-    fraudState = readState(getRuntimeContext)
+    val state = readState(getRuntimeContext)
+    flagState = state._1
+    timerState = state._2
+    lastTransaction = state._3
 
   override def readKey(
       key: Long,
       ctx: Context,
       out: Collector[KeyedFraudState]
   ): Unit =
-    out.collect(KeyedFraudState(key, fraudState))
+    out.collect(
+      KeyedFraudState(
+        key,
+        flagState.value(),
+        timerState.value(),
+        lastTransaction.value()
+      )
+    )
 
 @SerialVersionUID(1L)
 class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
   @transient lazy val logger = LoggerFactory.getLogger(classOf[FraudDetector])
 
-  @transient var fraudState: FraudStateVars = _
+  var flagState: ValueState[Boolean] = _
+  var timerState: ValueState[Long] = _
+  var lastTransaction: ValueState[Transaction] = _
 
   override def open(parameters: Configuration): Unit =
-    fraudState = readState(getRuntimeContext)
-    logger.info(s"Loaded last transaction: ${fraudState.lastTransaction}")
+    val state = readState(getRuntimeContext)
+    flagState = state._1
+    timerState = state._2
+    lastTransaction = state._3
+    logger.info(s"Loaded last transaction: ${lastTransaction}")
 
   @throws[Exception]
   def processElement(
@@ -104,7 +115,7 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       collector: Collector[Alert]
   ): Unit =
     // Get the current state for the current key
-    Option(fraudState.flagState.value).foreach { _ =>
+    Option(flagState.value).foreach { _ =>
       if transaction.amount > FraudDetector.LargeAmount then
         // Output an alert downstream
         val alert = Alert(transaction.accountId)
@@ -117,16 +128,16 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
 
     if transaction.amount < FraudDetector.SmallAmount then
       // set the flag to true
-      fraudState.flagState.update(true)
+      flagState.update(true)
 
       // set the timer and timer state
       val timer =
         context.timerService.currentProcessingTime + FraudDetector.OneMinute
       context.timerService.registerProcessingTimeTimer(timer)
-      fraudState.timerState.update(timer)
+      timerState.update(timer)
       logger.info(s"small amount: ${transaction.amount}")
 
-      fraudState.lastTransaction.update(transaction)
+      lastTransaction.update(transaction)
 
   override def onTimer(
       timestamp: Long,
@@ -134,15 +145,18 @@ class FraudDetector extends KeyedProcessFunction[Long, Transaction, Alert]:
       out: Collector[Alert]
   ): Unit =
     // remove flag after 1 minute, assuming that attacker makes fraudulent transactions within a minute
-    fraudState.clear()
+    // fraudState.clear()
+    flagState.clear()
+    timerState.clear()
 
   @throws[Exception]
   private def cleanUp(
       ctx: KeyedProcessFunction[Long, Transaction, Alert]#Context
   ): Unit =
     // delete timer
-    val timer = fraudState.timerState.value
+    val timer = timerState.value
     ctx.timerService.deleteProcessingTimeTimer(timer)
 
     // clean up all states
-    fraudState.clear()
+    flagState.clear()
+    timerState.clear()
