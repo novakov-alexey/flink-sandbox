@@ -17,3 +17,4 @@ metals.sbt
 sink-table
 input-table
 jars
+gcp-app-credentials
